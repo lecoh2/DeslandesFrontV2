@@ -24,15 +24,27 @@
         <!-- TÍTULO -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <label class="form-label">Título *</label>
-            <input type="text" class="form-control" formControlName="titulo">
-          </div>
+  <label class="form-label">Título *</label>
 
-          <div *ngIf="form.get('titulo')?.touched && form.get('titulo')?.invalid" class="text-danger mt-1">
-            <span *ngIf="form.get('titulo')?.hasError('required')">
-              O título é obrigatório.
-            </span>
-          </div>
+  <input
+    type="text"
+    class="form-control"
+    formControlName="titulo">
+
+  <div
+    class="text-danger mt-1"
+    *ngIf="form.get('titulo')?.touched && form.get('titulo')?.errors">
+
+    <div *ngIf="form.get('titulo')?.errors?.['required']">
+      O título é obrigatório.
+    </div>
+
+    <div *ngIf="form.get('titulo')?.errors?.['minlength']">
+      O título deve ter no mínimo 5 caracteres.
+    </div>
+
+  </div>
+</div>
 
           <!-- ENDEREÇO -->
 

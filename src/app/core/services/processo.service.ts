@@ -48,24 +48,30 @@ export class ProcessoService {
     if (searchTerm) params.searchTerm = searchTerm;
     return this.http.get<any>(`${this.url}/api/v1/processo/consultar-processo-paginacao`, { params });
   }
-editarProcesso(id: string, request: any): Observable<any> {
-  const token = localStorage.getItem('token');
+  editarProcesso(id: string, request: any): Observable<any> {
+    const token = localStorage.getItem('token');
 
-  return this.http.put<any>(
-    `${this.url}/api/v1/processo/atualizar-processo/${id}`,
-    request,
-    {
-      headers: token
-        ? { Authorization: `Bearer ${token}` }
-        : {}
-    }
-  );
-}
-ObterProcessoPorId(id: string): Observable<ObterProcessoResponse> {
-  return this.http.get<ObterProcessoResponse>(
-    `${this.url}/api/v1/processo/obter-processo-por-id/${id}`
+    return this.http.put<any>(
+      `${this.url}/api/v1/processo/atualizar-processo/${id}`,
+      request,
+      {
+        headers: token
+          ? { Authorization: `Bearer ${token}` }
+          : {}
+      }
+    );
+  }
+  ObterProcessoPorId(id: string): Observable<ObterProcessoResponse> {
+    return this.http.get<ObterProcessoResponse>(
+      `${this.url}/api/v1/processo/obter-processo-por-id/${id}`
 
-    
-  );
-}
+
+    );
+  }
+  importarDistribuicao(file: FormData) {
+    return this.http.post(
+      `${this.url}/api/v1/processo/importar-distribuicao`,
+      file
+    );
+  }
 }

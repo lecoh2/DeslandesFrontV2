@@ -26,14 +26,13 @@ export class UsuarioService {
 
     //método para logar
 
-    autenticar(request: AutenticarUsuarioRequest): Observable<AutenticarUsuarioResponse> {
-        return this.http
-            .post<{ mensagem: String, data: AutenticarUsuarioResponse }>(
-                `${this.url}/api/v1/usuarios/autenticar-usuario`, request)
-            .pipe(
-                map(response => response.data) // pega apenas os dados
-            );
-    }
+autenticar(request: AutenticarUsuarioRequest) {
+
+  return this.http.post<any>(
+    `${this.url}/api/v1/usuarios/autenticar-usuario`,
+    request
+  );
+}
     //métodos para cadastrar reclamacao
     cadastrar(request: CriarUsuarioRequest): Observable<CriarUsuarioResponse> {
         return this.http.post<CriarUsuarioResponse>

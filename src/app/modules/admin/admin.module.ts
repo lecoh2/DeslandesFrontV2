@@ -42,6 +42,9 @@ import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 import { Perfil } from "./components/usuario/perfil/perfil";
 import { EditarUsuario } from "./components/usuario/editar-usuario/editar-usuario";
 import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consultar-usuarios";
+import { ImportarProcessoExcel } from "./components/processo/importar/importar-processo-excel";
+import { CadastrarContrato } from "./components/contrato/cadastrar/cadastrar-contrato";
+import { ConsultarContrato } from "./components/contrato/consultar/consultar-contrato";
 
 
 
@@ -59,6 +62,7 @@ import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consu
         CadastrarProcesso,
         ConsultarProcesso,
         EditarProcesso,
+        ImportarProcessoExcel,
         CadastrarAtendimento,
         ConsultarAtendimento,
         EditarAtendimento,
@@ -76,6 +80,8 @@ import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consu
         EditarUsuario,
         ConsultarUsuarios,
         Perfil,
+        CadastrarContrato,
+        ConsultarContrato ,
 
 
 

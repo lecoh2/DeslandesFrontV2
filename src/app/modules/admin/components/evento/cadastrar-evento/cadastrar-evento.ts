@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, OnInit } from '@angular/core';
 import { CriarEventoRequest } from '../../../../../core/models/evento/criar-evento-request';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConsultarEtiquetaResponse } from '../../../../../core/models/etiqueta/consultar-etiqueta-response';
@@ -37,7 +37,8 @@ export class CadastrarEvento implements OnInit {
   private etiquetaService = inject(EtiquetaService);
   private usuarioService = inject(UsuarioService);
   private authHelper = inject(AuthHelper);
-
+private cdr = inject(ChangeDetectorRef);
+private zone = inject(NgZone);
   usuarioLogado?: AutenticarUsuarioResponse | null;
   private processoService = inject(ProcessoService);
   private casoService = inject(CasoService);
@@ -58,7 +59,7 @@ vinculoSelecionado: VinculoAutoComplete | null = null;
   grupoEventoEtiquetas: ConsultarEtiquetaResponse[] = [];
 
   form = this.builder.group({
-    titulo: ['', Validators.required],
+    titulo: ['', [Validators.required, Validators.minLength(5)]],
     endereco: [''],
     observacao: [''],
 
@@ -262,14 +263,37 @@ atendimentoId: this.vinculoSelecionado && 'assunto' in this.vinculoSelecionado
 
     console.log("REQUEST CORRIGIDO:", request);
 
-    this.eventoService.cadastrarEvento(request).subscribe({
-      next: res => {
-        this.resetar();
-        this.mensagemSucesso = [`Evento "${res.data.titulo}" criado com sucesso!`];
-        this.carregando = false;
-      },
-      error: err => this.tratarErro(err)
+  this.eventoService.cadastrarEvento(request).subscribe({
+  next: res => {
+
+    this.zone.run(() => {
+
+      this.resetar();
+
+      this.mensagemSucesso = [
+        `Evento "${res.data.titulo}" criado com sucesso!`
+      ];
+
+      this.carregando = false;
+
+      this.cdr.detectChanges();
+
     });
+
+  },
+
+  error: err => {
+
+    this.zone.run(() => {
+
+      this.tratarErro(err);
+
+      this.cdr.detectChanges();
+
+    });
+
+  }
+});
   }
 
   resetar() {
@@ -285,23 +309,34 @@ atendimentoId: this.vinculoSelecionado && 'assunto' in this.vinculoSelecionado
     this.resultadosVinculo = [];
   }
 
-  tratarErro(err: HttpErrorResponse) {
-    const e = err.error;
+tratarErro(err: HttpErrorResponse) {
 
-    this.mensagemErro = [];
+  const e = err.error;
 
-    if (e?.errors) {
-      for (const key in e.errors) {
-        this.mensagemErro.push(...e.errors[key]);
-      }
-    } else if (e?.mensagem) {
-      this.mensagemErro.push(e.mensagem);
-    } else {
-      this.mensagemErro.push('Erro inesperado.');
+  this.mensagemErro = [];
+
+  if (e?.errors) {
+
+    for (const key in e.errors) {
+      this.mensagemErro.push(...e.errors[key]);
     }
 
-    this.carregando = false;
+  } else if (e?.message) {
+
+    this.mensagemErro.push(e.message);
+
+  } else if (e?.mensagem) {
+
+    this.mensagemErro.push(e.mensagem);
+
+  } else {
+
+    this.mensagemErro.push('Erro inesperado.');
+
   }
+
+  this.carregando = false;
+}
   private montarDataHora(data?: string | null, hora?: string | null): string | undefined {
     if (!data || !hora) return undefined;
     return new Date(`${data}T${hora}:00`).toISOString();

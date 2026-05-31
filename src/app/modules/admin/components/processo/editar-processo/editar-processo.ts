@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  NgZone,
   ViewChild
 } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
@@ -57,6 +58,7 @@ export class EditarProcesso implements OnInit {
   private etiquetaService = inject(EtiquetaService);
   private historicoService = inject(HistoricoService);
   private cdr = inject(ChangeDetectorRef);
+  private zone = inject(NgZone);
   historico: any[] = [];
   carregandoHistorico = false;
   id!: string;
@@ -331,22 +333,38 @@ export class EditarProcesso implements OnInit {
       error: (err) => this.tratarErro(err)
     });
   }
-  private tratarErro(err: HttpErrorResponse) {
-    this.mensagemErro = [];
+  private tratarErro(err: HttpErrorResponse): void {
 
-    const e = err.error;
+    this.zone.run(() => {
 
-    if (e?.errors) {
-      for (const key in e.errors) {
-        this.mensagemErro.push(...e.errors[key]);
+      this.mensagemErro = [];
+
+      const e = err?.error;
+
+      if (e?.errors) {
+
+        for (const key in e.errors) {
+          this.mensagemErro.push(...e.errors[key]);
+        }
+
       }
-    } else if (e?.mensagem) {
-      this.mensagemErro.push(e.mensagem);
-    } else {
-      this.mensagemErro.push('Erro inesperado.');
-    }
+      else if (e?.mensagem) {
+        this.mensagemErro.push(e.mensagem);
+      }
+      else if (e?.message) {
+        this.mensagemErro.push(e.message);
+      }
+      else {
+        this.mensagemErro.push('Erro inesperado.');
+      }
 
-    this.carregando = false;
+      this.carregando = false;
+
+      console.log('ERRO BACKEND:', e);
+
+      // 🔥 FORÇA UI ATUALIZAR IMEDIATAMENTE
+      this.cdr.detectChanges();
+    });
   }
 
   abrirHistoricoProcesso(processoId: string) {

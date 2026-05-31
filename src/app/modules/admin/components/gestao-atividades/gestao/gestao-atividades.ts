@@ -76,7 +76,7 @@ export class GestaoAtividades implements OnInit {
   }
   getCorColuna(status: number): string {
     switch (status) {
-      case 1: return 'bg-secondary';   // A Fazer
+      case 1: return 'bg-info';   // A Fazer
       case 2: return 'bg-primary';     // Em Andamento
       case 3: return 'bg-success';     // Concluído
       // Cancelado

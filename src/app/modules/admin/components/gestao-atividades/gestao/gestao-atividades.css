@@ -161,4 +161,13 @@
 
 .dropdown-menu {
   min-width: 160px;
+}.header-afazer {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+.header-afazer h5,
+.header-afazer span,
+.header-afazer  {
+  color: #ffffff !important;
 }

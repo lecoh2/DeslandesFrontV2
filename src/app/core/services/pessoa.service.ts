@@ -10,19 +10,6 @@ import { PessoaResumo } from "../models/pessoa/pessoa-resumo";
 import { ApiResponse } from "../models/respostas/api-response";
 
 
-//import { ConsultarPessoaResponse } from "../models/pessoa/consultar-pessoa-response";
-//import { CadastrarPessoaFisicaRequest } from "../models/pessoa/cadastrar-pessoa-fisica-request";
-/*
-import { CadastrarPessoaFisicaResponse } from "../models/pessoa/cadastrar-pessoa-fisica-response";
-import { CadastrarPessoaJuridicaRequest } from "../models/pessoa/cadastrar-pessoa-juridica-request";
-import { CadastrarPessoaJuridicaResponse } from "../models/pessoa/cadastrar-pessoa-juridica-response";
-import { EditarPessoaFisicaRequest } from "../models/pessoa/editar-pessoa-fisica-request";
-import { EditarPessoaJuridicaResponse } from "../models/pessoa/editar-pessoa-juridica.response";
-import { EditarPessoaJuridicaRequest } from "../models/pessoa/editar-pessoa-juridica-request";
-import { EditarPessoaFisicaResponse } from "../models/pessoa/editar-pessoa-fisica-response";
-import { PagedResult } from "../models/paginacao/paged-result";
-import { DataTablesResponse } from "../models/paginacao/data-tables-response";
-*/
 
 @Injectable({
   providedIn: 'root' // Isso registra o serviço automaticamente no app
@@ -32,20 +19,7 @@ export class PessoaService {
   private url = environment.apiDeslandes;
   private http = inject(HttpClient);
 
-  //metodo para cadastrar a triagem
- // buscarPorNome(nome: string): Observable<ConsultarPessoaResponse[]> {
-   // return this.http.get<ConsultarPessoaResponse[]>
-  //    (`${this.url}/api/pessoa/consultar-pessoas-fisica/${encodeURIComponent(nome)}`);
-  //}
-  //  buscarPorNomePj(nome: string): Observable<ConsultarPessoaResponse[]> {
- //   return this.http.get<ConsultarPessoaResponse[]>
-    //  (`${this.url}/api/pessoa/consultar-pessoas-juridica/${encodeURIComponent(nome)}`);
- // }
- /// buscarPorNomePessoaJuridica(nome: string): Observable<ConsultarPessoaResponse[]> {
-   /// return this.http.get<ConsultarPessoaResponse[]>
- ///     (`${this.url}/api/pessoa/consultar-pessoas-juridica/${encodeURIComponent(nome)}`);
- // }
-
+ 
 
 cadastrarPessoaFisica(request: PessoaFisicaRequest): Observable<ApiResponse<PessoaFisicaResponse>> {
   const token = localStorage.getItem('token'); // ou de onde você armazena

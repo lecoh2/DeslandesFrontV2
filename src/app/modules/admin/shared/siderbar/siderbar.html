@@ -63,6 +63,8 @@
 						</a></li>
 					<li class="sidebar-item"><a class='sidebar-link' [routerLink]="['/admin', 'consultar-processo']">
 							Consultar</a></li>
+							<li class="sidebar-item"><a class='sidebar-link' [routerLink]="['/admin', 'importar-processo-excel']">
+							Impotar</a></li>
 				</ul>
 			</li>
 			<li class="sidebar-item" *ngIf="access.hasNivel('Administrador','Administração','Super Administrador', 'Coordenador',
@@ -150,7 +152,39 @@
 				</ul>
 
 			</li>
+<li class="sidebar-item"
+    *ngIf="access.hasNivel('Super Administrador','Administrador')">
 
+    <a data-bs-target="#contratos"
+       data-bs-toggle="collapse"
+       class="sidebar-link collapsed">
+
+        <i class="fas fa-file-signature align-middle"></i>
+        <span class="align-middle">Contratos</span>
+
+    </a>
+
+    <ul id="contratos"
+        class="sidebar-dropdown list-unstyled collapse"
+        data-bs-parent="#sidebar">
+
+        <li class="sidebar-item">
+            <a class="sidebar-link"
+               [routerLink]="['/admin', 'cadastrar-contrato']">
+                Cadastrar Contrato
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a class="sidebar-link"
+               [routerLink]="['/admin', 'consultar-contratos']">
+                Consultar Contratos
+            </a>
+        </li>
+
+    </ul>
+
+</li>
 			<li class="sidebar-item"><a class="sidebar-link collapsed" [routerLink]="['/admin', 'perfil']">
 					<i class="fas fa-user align-middle"></i><span class="align-middle">Perfil</span>
 				</a></li>

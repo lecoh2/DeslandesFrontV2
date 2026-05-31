@@ -13,13 +13,21 @@
             <app-spinner *ngIf="carregando" [show]="true" message="Salvando..."></app-spinner>
 
             <!-- ALERTAS -->
-            <app-alerts *ngIf="!carregando && mensagemSucesso.length" titulo="Sucesso!" [mensagens]="mensagemSucesso"
-                tipo="success">
-            </app-alerts>
+          <app-alerts
+  *ngIf="!carregando && mensagemSucesso.length"
+  titulo="Sucesso!"
+  [mensagens]="mensagemSucesso"
+  tipo="success"
+  icone="fas fa-check-circle">
+</app-alerts>
 
-            <app-alerts *ngIf="!carregando && mensagemErro.length" titulo="Erro!" [mensagens]="mensagemErro"
-                tipo="danger">
-            </app-alerts>
+         <app-alerts
+  *ngIf="!carregando && mensagemErro.length"
+  titulo="Erro!"
+  [mensagens]="mensagemErro"
+  tipo="danger"
+  icone="fas fa-times-circle">
+</app-alerts>
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <!-- ================= ETIQUETAS ================= -->
@@ -37,6 +45,11 @@
                     <div class="col-md-12">
                         <label class="form-label">Pasta</label>
                         <input class="form-control" formControlName="pasta">
+                    </div>
+                    <div class="text-danger mt-1" *ngIf="form.get('pasta')?.touched && form.get('pasta')?.errors">
+                        <div *ngIf="form.get('pasta')?.errors?.['required']">
+                            A pasta é obrigatória.
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -69,8 +82,11 @@
                         <label class="form-label">Título</label>
                         <input class="form-control" formControlName="titulo">
                     </div>
-
-
+                    <div class="text-danger mt-1" *ngIf="form.get('titulo')?.touched && form.get('titulo')?.errors">
+                        <div *ngIf="form.get('titulo')?.errors?.['required']">
+                            O número do processo é obrigatório.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row mb-3">
@@ -90,6 +106,12 @@
                         <label class="form-label">Número do Processo</label>
                         <input class="form-control" formControlName="numeroProcesso" mask="0000000-00.0000.0.00.0000">
                     </div>
+                    <div class="text-danger mt-1" *ngIf="form.get('titulo')?.touched && form.get('titulo')?.errors">
+                        <div *ngIf="form.get('numeroProcesso')?.errors?.['required']">
+                            O titulo é obrigatório.
+                        </div>
+                    </div>
+
                 </div>
                 <!-- ================= SELEÇÕES ================= -->
                 <div class="row mb-3">
@@ -112,6 +134,11 @@
                                 {{ vara.nomeVara }}
                             </option>
                         </select>
+                        <div class="text-danger mt-1" *ngIf="form.get('varaId')?.touched && form.get('varaId')?.errors">
+                            <div *ngIf="form.get('varaId')?.errors?.['required']">
+                                A vara é obrigatória.
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Ação</label>
@@ -217,8 +244,11 @@
                 </div>
 
                 <!-- BOTÃO -->
-                <button type="submit" class="btn btn-primary mt-3" [disabled]="carregando">
-                    <i class="fas fa-save"></i> Salvar Processo
+                <button type="submit" class="btn btn-primary" [disabled]="!podeEnviar || carregando">
+
+                    <i class="align-middle me-2 fas fa-save fa-lg"></i>
+                    Salvar
+
                 </button>
 
             </form>
