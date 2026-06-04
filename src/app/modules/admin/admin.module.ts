@@ -44,7 +44,14 @@ import { EditarUsuario } from "./components/usuario/editar-usuario/editar-usuari
 import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consultar-usuarios";
 import { ImportarProcessoExcel } from "./components/processo/importar/importar-processo-excel";
 import { CadastrarContrato } from "./components/contrato/cadastrar/cadastrar-contrato";
+import { CadastrarCentroCusto } from "./components/centro-custo/cadatrar/cadastrar-centro-custo";
+import { ConsultarCentroCusto } from "./components/centro-custo/consultar/consultar-centro-custo";
+import { EditarCentroCusto } from "./components/centro-custo/editar/editar-centro-custo";
 import { ConsultarContrato } from "./components/contrato/consultar/consultar-contrato";
+import { AutocompletePessoaUnica } from "./components/auto-complete-pessoa-unica/auto-complete-pessoa-unica";
+import { EditarContrato } from "./components/contrato/editar/editar-contrato";
+import { CadastrarContaReceber } from "./components/conta-receber/cadastrar-conta-receber";
+
 
 
 
@@ -81,14 +88,19 @@ import { ConsultarContrato } from "./components/contrato/consultar/consultar-con
         ConsultarUsuarios,
         Perfil,
         CadastrarContrato,
-        ConsultarContrato ,
-
+        ConsultarContrato,
+        EditarContrato,
+        CadastrarCentroCusto,
+        ConsultarCentroCusto,
+        EditarCentroCusto,
+        CadastrarContaReceber,
 
 
         //autocomplete
         AutocompletePessoa,
         AutocompletePessoaAtendimento,
         AutocompleteListaTarefas,
+        AutocompletePessoaUnica,
         CadastrarResponsaveis,
         Vinculo,
 

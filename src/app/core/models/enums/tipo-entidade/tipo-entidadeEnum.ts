@@ -7,4 +7,5 @@ export enum TipoEntidadeEnum {
   Cliente = 6,
   Usuario = 7,
   Pessoa = 8,
+  Contrato = 10,
 }

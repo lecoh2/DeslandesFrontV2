@@ -12,146 +12,162 @@
         </div>
 
         <div class="card-body">
+            <div class="alert alert-primary border-0 shadow-sm d-flex align-items-center p-3 mb-4 rounded-3 alert-dismissible fade show"
+                role="alert">
 
-            <!-- SPINNER -->
-            <app-spinner
-                *ngIf="carregando"
-                [show]="true"
-                message="Salvando contrato...">
+                <div class="me-3">
+                    <i class="fas fa-circle-info fs-4 text-white bg-primary rounded-circle p-2"></i>
+                </div>
+
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-0">
+                        Preencha os campos marcados com <strong>*</strong>. Os demais são opcionais.
+                    </h6>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                </button>
+
+            </div>
+            
+            <app-spinner *ngIf="carregando" [show]="true" message="Salvando contrato...">
             </app-spinner>
 
-            <!-- SUCESSO -->
-            <app-alerts
-                *ngIf="!carregando && mensagemSucesso.length"
-                titulo="Sucesso!"
-                [mensagens]="mensagemSucesso"
-                tipo="success">
+            <app-alerts *ngIf="!carregando && mensagemSucesso.length" titulo="Sucesso!" [mensagens]="mensagemSucesso"
+                tipo="success" icone="fas fa-check-circle">
             </app-alerts>
 
-            <!-- ERRO -->
-            <app-alerts
-                *ngIf="!carregando && mensagemErro.length"
-                titulo="Erro!"
-                [mensagens]="mensagemErro"
-                tipo="danger">
+            <app-alerts *ngIf="!carregando && mensagemErro.length" titulo="Erro!" [mensagens]="mensagemErro"
+                tipo="danger" icone="fas fa-times-circle">
             </app-alerts>
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-                <!-- DADOS DO CONTRATO -->
-                <h5 class="mb-3">Dados do Contrato</h5>
-
+                <!-- CONTRATO -->
                 <div class="row mb-3">
 
                     <div class="col-md-4">
-                        <label class="form-label">
-                            Número do Contrato *
-                        </label>
-
-                        <input
-                            class="form-control"
-                            formControlName="numero">
+                        <label class="form-label">Número *</label>
+                        <input class="form-control" formControlName="numero">
                     </div>
-
+                    <div class="text-danger mt-1" *ngIf="form.get('numero')?.touched && form.get('numero')?.errors">
+                        <div *ngIf="form.get('numero')?.errors?.['required']">
+                            O número do contrato é obrigatório.
+                        </div>
+                    </div>
+               
                     <div class="col-md-8">
 
+                        <app-autocomplete-pessoa-unica label="Cliente *" placeholder="Digite o cliente"
+                            [resultados]="clientesFiltrados" [selecionada]="clienteSelecionado"
+                            (buscar)="buscarClientes($event)" (selecionadaChange)="clienteSelecionado = $event">
+                        </app-autocomplete-pessoa-unica>
+                    </div>
+                    <div class="text-danger mt-1" *ngIf="!clienteSelecionado && form.touched">
+
+                        Escolha um cliente.
+
+                    </div>
                     <div class="col-md-8">
+                        <label class="form-label">Processos: * </label>
+                        <app-vinculo [resultados]="processosFiltrados" (buscar)="buscarProcessos($event)"
+                            (selecionado)="selecionarProcesso($event)">
+                        </app-vinculo>
 
-    <label class="form-label">Cliente *</label>
+                    </div>
+                    <div class="text-danger mt-1" *ngIf="processosSelecionados.length === 0 && form.touched">
 
-    <input
-        type="text"
-        class="form-control"
-        placeholder="Digite o nome do cliente"
-        #clienteInput
-        (keyup)="buscarPessoa(clienteInput.value)">
+                        Escolha pelo menos um processo.
 
-    <div
-        *ngIf="pessoasFiltradas.length > 0"
-        class="list-group position-absolute w-50 shadow">
+                    </div>
+                    <div class="mt-3">
+                        <div *ngIf="processosSelecionados.length" class="mt-3">
 
-        <button
-            type="button"
-            class="list-group-item list-group-item-action"
-            *ngFor="let pessoa of pessoasFiltradas"
-            (click)="selecionarPessoa(pessoa)">
+                            <h6 class="text-muted mb-2">
+                                Processos Vinculados
 
-            {{ pessoa.nome }}
+                                <span class="badge bg-primary ms-1">
+                                    {{ processosSelecionados.length }}
+                                </span>
+                            </h6>
 
-        </button>
+                            <div *ngFor="let processo of processosSelecionados"
+                                class="d-flex justify-content-between align-items-center py-2 px-2 border-bottom">
 
-    </div>
+                                <div class="d-flex align-items-center flex-grow-1">
 
-    <div
-        *ngIf="pessoaSelecionada"
-        class="alert alert-info mt-2 d-flex justify-content-between align-items-center">
+                                    <i class="fas fa-balance-scale text-primary me-3"></i>
 
-        <span>
-            {{ pessoaSelecionada.nome }}
-        </span>
+                                    <div class="d-flex flex-column">
 
-        <button
-            type="button"
-            class="btn btn-sm btn-danger"
-            (click)="removerPessoa()">
+                                        <strong>
+                                            {{ processo.numeroProcesso }}
+                                        </strong>
 
-            Remover
+                                        <small class="text-muted">
+                                            {{ processo.pasta }}
+                                        </small>
 
-        </button>
+                                    </div>
 
-    </div>
+                                </div>
 
-</div>
+                                <button type="button" class="border-0 bg-transparent p-0"
+                                    (click)="removerProcesso(processo)">
+
+                                    <i class="fas fa-fw fa-trash-alt text-muted"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
                 </div>
 
+
+                <!-- VALORES -->
                 <div class="row mb-3">
 
                     <div class="col-md-4">
-                        <label class="form-label">
-                            Valor do Contrato *
-                        </label>
-
-                        <input
-                            type="number"
-                            class="form-control"
-                            formControlName="valorContrato">
+                        <label class="form-label">Valor *</label>
+<input
+  type="text"
+  class="form-control"
+  formControlName="valorContrato"
+  (input)="onMoneyInput($event)"
+/>
+       
                     </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">
-                            Data Inicial *
-                        </label>
-
-                        <input
-                            type="date"
-                            class="form-control"
-                            formControlName="dataInicio">
+                    <div class="text-danger mt-1"
+                        *ngIf="form.get('valorContrato')?.touched && form.get('valorContrato')?.errors">
+                        <div *ngIf="form.get('valorContrato')?.errors?.['required']">
+                            o Valor do contrato é obrigatório.
+                        </div>
                     </div>
-
                     <div class="col-md-4">
-                        <label class="form-label">
-                            Data Final
-                        </label>
-
-                        <input
-                            type="date"
-                            class="form-control"
-                            formControlName="dataFim">
+                        <label class="form-label">Data Início *</label>
+                        <input type="date" class="form-control" formControlName="dataInicio">
+                    </div>
+                    <div class="text-danger mt-1"
+                        *ngIf="form.get('dataInicio')?.touched && form.get('dataInicio')?.errors">
+                        <div *ngIf="form.get('dataInicio')?.errors?.['required']">
+                            A data de início do contrato é obrigatória.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Data Fim </label>
+                        <input type="date" class="form-control" formControlName="dataFim">
                     </div>
 
                 </div>
 
+                <button type="submit" class="btn btn-primary" [disabled]="!podeEnviar || carregando">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="carregando">
-
-                    <i class="fas fa-save"></i>
-                    Salvar Contrato
+                    <i class="align-middle me-2 fas fa-save fa-lg"></i>
+                    Salvar
 
                 </button>
 

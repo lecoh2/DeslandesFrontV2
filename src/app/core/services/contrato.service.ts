@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 
 import { environment } from "../../../environments/environment.development";
 
@@ -17,22 +17,23 @@ export class ContratoService {
   private url = environment.apiDeslandes;
   private http = inject(HttpClient);
 
-  cadastrarContrato(
-    request: ContratoRequest
-  ): Observable<ApiResponse<ContratoResponse>> {
+cadastrarContrato(request: ContratoRequest): Observable<ApiResponse<ContratoResponse>> {
 
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
-    return this.http.post<ApiResponse<ContratoResponse>>(
-      `${this.url}/api/v1/contrato/cadastrar-contrato`,
-      request,
-      {
-        headers: token
-          ? { Authorization: `Bearer ${token}` }
-          : {}
-      }
-    );
-  }
+  return this.http.post<ApiResponse<ContratoResponse>>(
+    `${this.url}/api/v1/contrato/cadastrar-contrato`,
+    request,
+    {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    }
+  )
+  .pipe(
+    catchError(err => {
+      return throwError(() => err);
+    })
+  );
+}
 
   consultarContratosPaginado(
     pageNumber: number,

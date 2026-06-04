@@ -79,8 +79,15 @@ export class CadastrarTarefa implements OnInit {
   form = this.builder.group({
     descricao: ['', Validators.required],
     dataTarefa: ['', Validators.required],
-    prioridade: [PrioridadeTarefaEnum.Media],
-    statusGeralKanban: [StatusGeralKanbanEnum.A_Fazer],
+     prioridade: [
+    PrioridadeTarefaEnum.Media,
+    Validators.required
+  ],
+
+  statusGeralKanban: [
+    StatusGeralKanbanEnum.A_Fazer,
+    Validators.required
+  ],
     tipoVinculo: this.builder.control<'processo' | 'caso' | 'atendimento' | null>(null),
 
     processoId: this.builder.control<string | null>(null),
@@ -223,10 +230,10 @@ export class CadastrarTarefa implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    if (this.listasTarefa.length === 0) {
-      this.mensagemErro = ['Adicione pelo menos um item na lista de tarefas.'];
-      return;
-    }
+    //if (this.listasTarefa.length === 0) {
+     // this.mensagemErro = ['Adicione pelo menos um item na lista de tarefas.'];
+    //  return;
+    //}
     this.carregando = true;
 
     const f = this.form.value;

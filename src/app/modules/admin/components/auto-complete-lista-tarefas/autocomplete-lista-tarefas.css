@@ -38,4 +38,7 @@ select.form-select-sm {
 
 button.btn-outline-danger {
   border-radius: 6px;
+}.selecionados-container {
+  max-height: 140px;
+  overflow-y: auto;
 }

@@ -77,25 +77,30 @@
                         <tbody>
 
                             <tr *ngFor="let item of dataSource.data">
+<td>
+    <i class="fas fa-hashtag text-muted me-1"></i>
+    {{ item.numero }}
+</td>
 
-                                <td>{{ item.numero }}</td>
+<td>
+    <i class="fas fa-user text-muted me-1"></i>
+    {{ item.nomePessoa }}
+</td>
 
-                                <td>
-                                    {{ item.nomePessoa }}
-                                </td>
+<td>
+    <i class="fas fa-money-bill text-success me-1"></i>
+    {{ item.valorContrato | currency:'BRL' }}
+</td>
 
-                                <td>
-                                    {{ item.valorContrato | currency:'BRL' }}
-                                </td>
+<td>
+    <i class="fas fa-calendar-day text-primary me-1"></i>
+    {{ item.dataInicio | date:'dd/MM/yyyy' }}
+</td>
 
-                                <td>
-                                    {{ item.dataInicio | date:'dd/MM/yyyy' }}
-                                </td>
-
-                                <td>
-                                    {{ item.dataFim | date:'dd/MM/yyyy' }}
-                                </td>
-
+<td>
+    <i class="fas fa-calendar-xmark text-danger me-1"></i>
+    {{ item.dataFim | date:'dd/MM/yyyy' }}
+</td>
                                 <td class="text-end align-middle">
 
                                     <a [routerLink]="['/admin/editar-contrato', item.id]"

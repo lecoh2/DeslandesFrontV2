@@ -135,15 +135,21 @@ getLabel(item: any): string {
 
   if (!item) return '';
 
-  if (item.assunto) {
-    return item.assunto; // atendimento
-  }
+  const partes: string[] = [];
 
-  if (item.pasta) {
-    return item.pasta; // processo e caso
-  }
+  if (item.numeroProcesso)
+    partes.push(item.numeroProcesso);
 
-  return '';
+  if (item.pasta)
+    partes.push(item.pasta);
+
+  if (item.titulo)
+    partes.push(item.titulo);
+
+  if (item.assunto)
+    partes.push(item.assunto);
+
+  return partes.join(' - ');
 }
   abrir() {
     const v = (this.control.value ?? '').toString();

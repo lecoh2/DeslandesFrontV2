@@ -1,14 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
-import { catchError, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 
 import { ContratoService } from '../../../../../core/services/contrato.service';
 import { PessoaService } from '../../../../../core/services/pessoa.service';
+import { ProcessoService } from '../../../../../core/services/processo.service';
 
 import { PessoaResumo } from '../../../../../core/models/pessoa/pessoa-resumo';
 import { ContratoRequest } from '../../../../../core/models/contrato/contrato-request';
+import { ProcessoAutoComplete } from '../../../../../core/models/processo/processo-auto-complete';
 
 @Component({
   selector: 'app-cadastrar-contrato',
@@ -18,186 +19,234 @@ import { ContratoRequest } from '../../../../../core/models/contrato/contrato-re
 })
 export class CadastrarContrato implements OnInit {
 
-  // =========================
-  // INJEÇÕES
-  // =========================
-
   private builder = inject(FormBuilder);
   private contratoService = inject(ContratoService);
   private pessoaService = inject(PessoaService);
-
-  // =========================
-  // ESTADO
-  // =========================
-
+  private processoService = inject(ProcessoService);
+  private cdr = inject(ChangeDetectorRef);
+ private zone = inject(NgZone);
   carregando = false;
 
   mensagemErro: string[] = [];
   mensagemSucesso: string[] = [];
 
-  pessoasFiltradas: PessoaResumo[] = [];
-
-  pessoaSelecionada?: PessoaResumo;
-
-  // =========================
-  // FORM
-  // =========================
+  processosFiltrados: ProcessoAutoComplete[] = [];
+  processosSelecionados: ProcessoAutoComplete[] = [];
+  clientesFiltrados: PessoaResumo[] = [];
+  clienteSelecionado?: PessoaResumo;
 
   form = this.builder.group({
     numero: ['', Validators.required],
-    pessoaId: ['', Validators.required],
-    valorContrato: [0, Validators.required],
+     valorContrato: [0, Validators.required],
     dataInicio: ['', Validators.required],
     dataFim: [''],
-   
   });
-
-  // =========================
-  // INIT
-  // =========================
 
   ngOnInit(): void {}
 
+  get podeEnviar(): boolean {
+    return (
+      this.form.valid &&
+      this.clienteSelecionado != null &&
+      this.processosSelecionados.length > 0 &&
+      !this.carregando
+    );
+  }
+
   // =========================
-  // AUTOCOMPLETE CLIENTE
+  // CLIENTE
   // =========================
-
-  buscarPessoa(nome: string): void {
-
-    if (!nome || nome.length < 2) {
-      this.pessoasFiltradas = [];
-      return;
-    }
-
-    this.pessoaService
-      .consultarPessoasResumo(nome)
-      .pipe(
-        catchError(() => of([]))
-      )
-      .subscribe({
-        next: (response) => {
-          this.pessoasFiltradas = response;
-        }
+  buscarClientes(nome: string) {
+    this.pessoaService.consultarPessoasResumo(nome)
+      .pipe(catchError(() => of([])))
+      .subscribe(res => {
+        this.clientesFiltrados = res;
       });
   }
 
-  selecionarPessoa(pessoa: PessoaResumo): void {
+  // =========================
+  // PROCESSO
+  // =========================
+  buscarProcessos(termo: string) {
 
-    this.pessoaSelecionada = pessoa;
+    if (!termo || termo.length < 2) {
+      this.processosFiltrados = [];
+      return;
+    }
 
-    this.form.patchValue({
-      pessoaId: pessoa.id
-    });
-
-    this.pessoasFiltradas = [];
+    this.processoService.consultarProcessoAutoComplete(termo)
+      .pipe(catchError(() => of([])))
+      .subscribe(res => {
+        this.processosFiltrados = res;
+      });
   }
 
-  removerPessoa(): void {
+  selecionarProcesso(processo: ProcessoAutoComplete) {
 
-    this.pessoaSelecionada = undefined;
+    if (!this.processosSelecionados.some(x => x.id === processo.id)) {
+      this.processosSelecionados.push(processo);
+    }
 
-    this.form.patchValue({
-      pessoaId: ''
-    });
+    this.processosFiltrados = [];
+  }
+
+  removerProcesso(processo: ProcessoAutoComplete) {
+    this.processosSelecionados =
+      this.processosSelecionados.filter(x => x.id !== processo.id);
   }
 
   // =========================
   // SUBMIT
   // =========================
+onSubmit(): void {
 
-  onSubmit(): void {
+  this.mensagemErro = [];
+  this.mensagemSucesso = [];
 
-    this.mensagemErro = [];
-    this.mensagemSucesso = [];
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
+  }
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+  if (!this.clienteSelecionado) {
+    this.mensagemErro = ['Selecione um cliente'];
+    return;
+  }
 
-    if (!this.pessoaSelecionada) {
-      this.mensagemErro = ['Selecione um cliente.'];
-      return;
-    }
-
+  this.zone.run(() => {
     this.carregando = true;
+    this.cdr.detectChanges();
+  });
 
-    const request: ContratoRequest = {
-      numero: this.form.value.numero!,
-      pessoaId: this.form.value.pessoaId!,
-      valorContrato: Number(this.form.value.valorContrato),
-      dataInicio: new Date(this.form.value.dataInicio!),
-      dataFim: this.form.value.dataFim
-        ? new Date(this.form.value.dataFim)
-        : undefined,
-     
-    };
+ const rawValor = (this.form.value.valorContrato ?? '').toString();
 
-    this.contratoService
-      .cadastrarContrato(request)
-      .subscribe({
-        next: (response: any) => {
+  const request: ContratoRequest = {
+    numero: this.form.value.numero!,
+    pessoaId: this.clienteSelecionado.id,
+    valorTotal: this.converterMoedaParaDecimal(rawValor),
+    dataInicio: new Date(this.form.value.dataInicio!),
+    dataFim: this.form.value.dataFim
+      ? new Date(this.form.value.dataFim)
+      : undefined,
+    processosIds: this.processosSelecionados.map(x => x.id)
+  };
 
-          this.resetarFormulario();
+  this.contratoService.cadastrarContrato(request)
+    .pipe(
+      finalize(() => {
+        this.zone.run(() => {
+          this.carregando = false;
+          this.cdr.detectChanges();
+        });
+      })
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        this.zone.run(() => {
+
+          this.resetar();
 
           this.mensagemSucesso = [
-            response.message ?? 'Contrato cadastrado com sucesso.'
+            res.message ?? 'Contrato cadastrado com sucesso.'
           ];
 
-          this.carregando = false;
-        },
+          this.cdr.detectChanges();
+        });
+      },
 
-        error: (error: HttpErrorResponse) => {
-          this.tratarErro(error);
-        }
-      });
+      error: (err: HttpErrorResponse) => {
+
+        this.zone.run(() => {
+
+          const e = err?.error;
+
+          this.mensagemErro = [];
+
+          if (e?.errors) {
+            for (const key in e.errors) {
+              this.mensagemErro.push(...e.errors[key]);
+            }
+          }
+          else if (e?.message) {
+            this.mensagemErro.push(e.message);
+          }
+          else {
+            this.mensagemErro.push('Erro inesperado ao cadastrar contrato.');
+          }
+
+          this.carregando = false;
+
+          this.cdr.detectChanges();
+
+          console.log('ERRO BACKEND:', e);
+        });
+      }
+    });
+}  onMoneyInput(event: any) {
+
+  let value = event.target.value.replace(/\D/g, '');
+
+  if (!value) {
+    this.form.get('valorContrato')?.setValue(0, { emitEvent: false });
+    return;
   }
+
+  const numericValue = Number(value);
+
+  const formatted = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(numericValue / 100);
+
+  // atualiza o FORM (valor real)
+  this.form.get('valorContrato')?.setValue(numericValue / 100, {
+    emitEvent: false
+  });
+
+  // atualiza o INPUT visual
+  event.target.value = formatted;
+}
 
   // =========================
   // RESET
   // =========================
+   private resetar() {
 
-  private resetarFormulario(): void {
-
-    this.form.reset({
-      valorContrato: 0
+        this.form.reset({
+        valorContrato: 0
     });
 
-    this.pessoaSelecionada = undefined;
-    this.pessoasFiltradas = [];
-  }
-
-  // =========================
-  // ERROS
-  // =========================
-
-  private tratarErro(error: HttpErrorResponse): void {
-
-    this.mensagemErro = [];
-
-    const errorResponse = error.error;
-
-    if (errorResponse?.errors) {
-
-      for (const key in errorResponse.errors) {
-        this.mensagemErro.push(
-          ...errorResponse.errors[key]
-        );
-      }
-
-    } else if (errorResponse?.message) {
-
-      this.mensagemErro.push(
-        errorResponse.message
-      );
-
-    } else {
-
-      this.mensagemErro.push(
-        'Erro inesperado ao cadastrar contrato.'
-      );
+        this.clienteSelecionado = undefined;
+        this.clientesFiltrados = [];
+        this.processosFiltrados = [];
+        this.processosSelecionados = [];
     }
 
-    this.carregando = false;
+
+  // =========================
+  // MOEDA
+  // =========================
+  formatarMoeda(event: any) {
+
+    let valor = event.target.value.replace(/\D/g, '');
+
+    valor = (Number(valor) / 100).toFixed(2) + '';
+    valor = valor.replace('.', ',');
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    event.target.value = valor;
   }
+    private converterMoedaParaDecimal(valor: any): number {
+
+        if (!valor) return 0;
+
+        const limpo = String(valor)
+            .replace(/\./g, '')
+            .replace(',', '.')
+            .trim();
+
+        return parseFloat(limpo);
+    }
 }

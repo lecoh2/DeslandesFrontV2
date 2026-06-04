@@ -30,7 +30,38 @@
 							Agenda</a></li>
 				</ul>
 			</li>
+			<li class="sidebar-item" *ngIf="access.hasNivel(
+      'Administrador',
+      'Administração',
+      'Super Administrador',
+      'Coordenador',
+      'Supervisor'
+    )">
 
+				<a data-bs-target="#centroCusto" data-bs-toggle="collapse" class="sidebar-link collapsed">
+
+					<i class="fas fa-sitemap align-middle"></i>
+					<span class="align-middle">Centro de Custos</span>
+
+				</a>
+
+				<ul id="centroCusto" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" [routerLink]="['/admin', 'cadastrar-centro-custo']">
+							Cadastrar
+						</a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" [routerLink]="['/admin', 'consultar-centro-custo']">
+							Consultar
+						</a>
+					</li>
+
+				</ul>
+
+			</li>
 			<li class="sidebar-item" *ngIf="access.hasNivel('Administrador','Administração','Super Administrador', 'Coordenador',
 	'Estagiários', 'Supervisor','Conciliador')">
 				<a data-bs-target="#pessoas" data-bs-toggle="collapse" class="sidebar-link collapsed">
@@ -63,7 +94,8 @@
 						</a></li>
 					<li class="sidebar-item"><a class='sidebar-link' [routerLink]="['/admin', 'consultar-processo']">
 							Consultar</a></li>
-							<li class="sidebar-item"><a class='sidebar-link' [routerLink]="['/admin', 'importar-processo-excel']">
+					<li class="sidebar-item"><a class='sidebar-link'
+							[routerLink]="['/admin', 'importar-processo-excel']">
 							Impotar</a></li>
 				</ul>
 			</li>
@@ -71,7 +103,7 @@
 	'Estagiários', 'Supervisor','Conciliador')">
 				<a data-bs-target="#atendimento" data-bs-toggle="collapse" class="sidebar-link collapsed">
 
-					<i class="fas fa-headset align-middle"></i> <span class="align-middle">Atendimento</span>
+					<i class="fas fa-headset align-middle"></i> <span class="align-middle">Atendimentos</span>
 
 
 				</a>
@@ -87,7 +119,7 @@
 	'Estagiários', 'Supervisor','Conciliador')">
 				<a data-bs-target="#tarefa" data-bs-toggle="collapse" class="sidebar-link collapsed">
 
-					<i class="fas fa-tasks align-middle"></i> <span class="align-middle">Tarefa</span>
+					<i class="fas fa-tasks align-middle"></i> <span class="align-middle">Tarefas</span>
 
 
 				</a>
@@ -103,7 +135,7 @@
 	'Estagiários', 'Supervisor','Conciliador')">
 				<a data-bs-target="#evento" data-bs-toggle="collapse" class="sidebar-link collapsed">
 
-					<i class="fas fa-calendar-alt align-middle"></i> <span class="align-middle">Evento</span>
+					<i class="fas fa-calendar-alt align-middle"></i> <span class="align-middle">Eventos</span>
 
 
 				</a>
@@ -113,7 +145,7 @@
 						</a></li>
 					<li class="sidebar-item"><a class='sidebar-link' [routerLink]="['/admin', 'consultar-evento']">
 							Consultar</a></li>
-						
+
 				</ul>
 			</li>
 
@@ -121,7 +153,7 @@
 	'Estagiários', 'Supervisor','Conciliador')">
 				<a data-bs-target="#caso" data-bs-toggle="collapse" class="sidebar-link collapsed">
 
-					<i class="fas fa-folder-open align-middle"></i><span class="align-middle">Caso</span>
+					<i class="fas fa-folder-open align-middle"></i><span class="align-middle">Casos</span>
 
 
 				</a>
@@ -152,39 +184,32 @@
 				</ul>
 
 			</li>
-<li class="sidebar-item"
-    *ngIf="access.hasNivel('Super Administrador','Administrador')">
+			<li class="sidebar-item" *ngIf="access.hasNivel('Super Administrador','Administrador')">
 
-    <a data-bs-target="#contratos"
-       data-bs-toggle="collapse"
-       class="sidebar-link collapsed">
+				<a data-bs-target="#contratos" data-bs-toggle="collapse" class="sidebar-link collapsed">
 
-        <i class="fas fa-file-signature align-middle"></i>
-        <span class="align-middle">Contratos</span>
+					<i class="fas fa-file-signature align-middle"></i>
+					<span class="align-middle">Contratos</span>
 
-    </a>
+				</a>
 
-    <ul id="contratos"
-        class="sidebar-dropdown list-unstyled collapse"
-        data-bs-parent="#sidebar">
+				<ul id="contratos" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
 
-        <li class="sidebar-item">
-            <a class="sidebar-link"
-               [routerLink]="['/admin', 'cadastrar-contrato']">
-                Cadastrar Contrato
-            </a>
-        </li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" [routerLink]="['/admin', 'cadastrar-contrato']">
+							Cadastrar Contrato
+						</a>
+					</li>
 
-        <li class="sidebar-item">
-            <a class="sidebar-link"
-               [routerLink]="['/admin', 'consultar-contratos']">
-                Consultar Contratos
-            </a>
-        </li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" [routerLink]="['/admin', 'consultar-contratos']">
+							Consultar Contratos
+						</a>
+					</li>
 
-    </ul>
+				</ul>
 
-</li>
+			</li>
 			<li class="sidebar-item"><a class="sidebar-link collapsed" [routerLink]="['/admin', 'perfil']">
 					<i class="fas fa-user align-middle"></i><span class="align-middle">Perfil</span>
 				</a></li>

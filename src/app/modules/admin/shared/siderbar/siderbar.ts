@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { AccessService } from '../../../../core/services/access.service';
 import { AuthHelper } from '../../../../core/helpers/auth.helper';
-import { UsuarioService } from '../../../../core/services/usuario.service';
-
 
 @Component({
   selector: 'app-siderbar',
@@ -10,22 +10,41 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
   templateUrl: './siderbar.html',
   styleUrl: './siderbar.css'
 })
-export class Siderbar {
-  constructor(public access: AccessService
-  ) { }
-  authHelper = inject(AuthHelper);
+export class Siderbar implements OnInit {
 
-  //atributos 
+  private authHelper = inject(AuthHelper);
+
   nomeUsuario: string = '';
   usuarioLogado: any;
-  ngOnInit() {
+
+  constructor(
+    public access: AccessService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+
     this.usuarioLogado = this.authHelper.get();
-    this.nomeUsuario = this.authHelper.get()?.nomeUsuario ?? 'Usuário';
+
+    this.nomeUsuario =
+      this.usuarioLogado?.nomeUsuario ??
+      'Usuário';
   }
-  logout() {
-    if (confirm(`Deseja realmente sair do sistema, ${this.nomeUsuario}?`)) {
-      this.authHelper.remove();//apagar os dados do usuario
-      location.reload();//recarregar página
+
+  logout(): void {
+
+    const confirmar = confirm(
+      `Deseja realmente sair do sistema, ${this.nomeUsuario}?`
+    );
+
+    if (!confirmar) {
+      return;
     }
+
+    // Remove os dados do usuário autenticado
+    this.authHelper.remove();
+
+    // Redireciona para a tela de login
+    this.router.navigate(['/login/autenticar-usuario']);
   }
 }

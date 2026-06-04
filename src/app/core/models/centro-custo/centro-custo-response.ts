@@ -4,8 +4,3 @@ export interface CentroCustoResponse {
   descricao?: string;
   ativo: boolean;
 }
-
-export interface CentroCustoRequest {
-  nome: string;
-  descricao?: string;
-}

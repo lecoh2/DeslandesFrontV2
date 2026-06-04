@@ -1,8 +1,10 @@
 export interface ContratoRequest {
   numero: string;
   pessoaId: string;
-  valorContrato: number;
+  valorTotal: number;
   dataInicio: Date;
   dataFim?: Date;
+    processosIds: string[];
+    observacao?: string;
 
 }
