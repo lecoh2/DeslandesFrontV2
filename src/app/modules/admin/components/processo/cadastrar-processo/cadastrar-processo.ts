@@ -84,9 +84,9 @@ export class CadastrarProcesso implements OnInit {
     numeroProcesso: ['', Validators.required],
     linkTribunal: [''],
     objeto: [''],
-    valorCausa: [null],
     distribuido: [null],
-    valorCondenacao: [null],
+    valorCausa: this.builder.control<number | null>(null),
+  valorCondenacao: this.builder.control<number | null>(null),
     observacao: [''],
     instancia: [null],
     acesso: [null],
@@ -139,7 +139,40 @@ export class CadastrarProcesso implements OnInit {
 
     return `${vara.nomeVara} - ${vara.nomeForo}`;
   }
+onMoneyInput(event: any, campo: 'valorCausa' | 'valorCondenacao') {
 
+  const value = event.target.value.replace(/\D/g, '');
+
+  if (!value) {
+
+    this.form.get(campo)?.setValue(null, {
+      emitEvent: false
+    });
+
+    event.target.value = '';
+
+    return;
+  }
+
+  const numericValue = Number(value) / 100;
+
+  const formatted = new Intl.NumberFormat(
+    'pt-BR',
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }
+  ).format(numericValue);
+
+  this.form.get(campo)?.setValue(
+    numericValue,
+    {
+      emitEvent: false
+    }
+  );
+
+  event.target.value = formatted;
+}
   // ================== DADOS INICIAIS ==================
   private carregarDadosIniciais() {
 

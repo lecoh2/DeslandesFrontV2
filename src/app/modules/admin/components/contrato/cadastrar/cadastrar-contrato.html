@@ -48,7 +48,7 @@
 
                     <div class="col-md-4">
                         <label class="form-label">Número *</label>
-                        <input class="form-control" formControlName="numero">
+                        <input class="form-control" formControlName="numero" mask="00000-0000" placeholder="00000-0000">
                     </div>
                     <div class="text-danger mt-1" *ngIf="form.get('numero')?.touched && form.get('numero')?.errors">
                         <div *ngIf="form.get('numero')?.errors?.['required']">

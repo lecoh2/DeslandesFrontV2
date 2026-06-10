@@ -38,7 +38,10 @@ import { CadastrarCentroCusto } from "./components/centro-custo/cadatrar/cadastr
 import { ConsultarCentroCusto } from "./components/centro-custo/consultar/consultar-centro-custo";
 import { EditarCentroCusto } from "./components/centro-custo/editar/editar-centro-custo";
 import { EditarContrato } from "./components/contrato/editar/editar-contrato";
-import { CadastrarContaReceber } from "./components/conta-receber/cadastrar-conta-receber";
+import { CadastrarContaReceber } from "./components/conta-receber/cadastrar/cadastrar-conta-receber";
+import { ConsultarContaReceber } from "./components/conta-receber/consultar/consultar-conta-receber";
+import { VisualizarContaReceber } from "./components/conta-receber/visualizar/visualizar-conta-receber";
+import { EditarContaReceber } from "./components/conta-receber/editar/editar-conta-receber";
 //import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 
 
@@ -213,13 +216,7 @@ export const routes: Routes = [
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
             },
 
-            {
-                path: 'criar-usuario',
-                component: CriarUsuario,
-                canActivate: [AuthGuard, NivelGuard],
-                data: { niveis: ['Super Administrador', 'Administrador', 'Administração', 'Coordenador', 'Conciliador', 'Estagiários'] }
-
-            },
+        
             {
                 path: 'cadastrar-contrato',
                 component: CadastrarContrato,
@@ -243,21 +240,29 @@ export const routes: Routes = [
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
             },
             {
-                path: 'cadastrar-contaReceber',
+                path: 'cadastrar-conta-receber',
                 component: CadastrarContaReceber,
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
             }, {
-                path: 'consultar-',
-                component: ConsultarContrato,
+                path: 'consultar-conta-receber',
+                component: ConsultarContaReceber,
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
-            }, {
-                path: 'editar-/:id',
-                component: EditarContrato,
+            }
+            ,
+             {
+                path: 'editar-conta-receber/:id',
+                component: EditarContaReceber,
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
-            },
+             },
+             {
+                path: 'visualizar-conta-receber/:id',
+                component: VisualizarContaReceber,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+             },
             {
                 path: 'perfil',
                 component: Perfil,

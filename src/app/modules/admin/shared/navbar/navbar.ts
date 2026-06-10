@@ -18,6 +18,8 @@ import { Notificacao } from '../../../../core/models/notficacao/notificacao';
 import { NotificacoService } from '../../../../core/services/notificacao.service';
 import { NotificacaoSignalRService } from '../../../../core/services/notificacao-signalr.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { AccessService } from '../../../../core/services/access.service';
 @Component({
   selector: 'app-navbar',
   standalone: false,
@@ -34,6 +36,10 @@ export class Navbar implements OnInit, AfterViewInit, OnDestroy {
   private dashboardService = inject(DashboardService);
   private notificacaoService = inject(NotificacoService);
    private notificacaoSignalR = inject(NotificacaoSignalRService);
+    constructor(
+    public access: AccessService,
+    private router: Router
+  ) { }
   authHelper = inject(AuthHelper);
 
 
@@ -272,10 +278,18 @@ next: () => {
   // LOGOUT
   logout(): void {
 
-    if (confirm(`Deseja realmente sair do sistema, ${this.nomeUsuario}?`)) {
+    const confirmar = confirm(
+      `Deseja realmente sair do sistema, ${this.nomeUsuario}?`
+    );
 
-      this.authHelper.remove();
-      location.reload();
+    if (!confirmar) {
+      return;
     }
+
+    // Remove os dados do usuário autenticado
+    this.authHelper.remove();
+
+    // Redireciona para a tela de login
+    this.router.navigate(['/login/autenticar-usuario']);
   }
 }

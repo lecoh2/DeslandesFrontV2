@@ -1,3 +1,5 @@
+import { ContaReceberBaixaResponse } from "./conta-receber-baixar-response";
+
 export interface ContaReceberResponse {
   id: string;
   descricao: string;
@@ -14,4 +16,5 @@ export interface ContaReceberResponse {
 
   categoriaFinanceiraId?: string;
   categoriaFinanceira?: string;
+    baixas: ContaReceberBaixaResponse[];
 }

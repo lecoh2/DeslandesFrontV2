@@ -50,7 +50,10 @@ import { EditarCentroCusto } from "./components/centro-custo/editar/editar-centr
 import { ConsultarContrato } from "./components/contrato/consultar/consultar-contrato";
 import { AutocompletePessoaUnica } from "./components/auto-complete-pessoa-unica/auto-complete-pessoa-unica";
 import { EditarContrato } from "./components/contrato/editar/editar-contrato";
-import { CadastrarContaReceber } from "./components/conta-receber/cadastrar-conta-receber";
+import { CadastrarContaReceber } from "./components/conta-receber/cadastrar/cadastrar-conta-receber";
+import { ConsultarContaReceber } from "./components/conta-receber/consultar/consultar-conta-receber";
+import { VisualizarContaReceber } from "./components/conta-receber/visualizar/visualizar-conta-receber";
+import { EditarContaReceber } from "./components/conta-receber/editar/editar-conta-receber";
 
 
 
@@ -94,6 +97,9 @@ import { CadastrarContaReceber } from "./components/conta-receber/cadastrar-cont
         ConsultarCentroCusto,
         EditarCentroCusto,
         CadastrarContaReceber,
+        ConsultarContaReceber,
+        VisualizarContaReceber,
+        EditarContaReceber,
 
 
         //autocomplete

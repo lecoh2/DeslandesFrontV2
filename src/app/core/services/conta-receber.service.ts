@@ -76,37 +76,71 @@ export class ContaReceberService {
     );
   }
 
-  consultarContasReceberPaginacao(
-    pageNumber: number,
-    pageSize: number
-  ) {
+consultarContasReceberPaginado(
+  pageNumber: number,
+  pageSize: number,
+  filtro: string = ''
+) {
 
-    const params: any = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString()
-    };
+  const params: any = {
+    pageNumber: pageNumber.toString(),
+    pageSize: pageSize.toString(),
+    filtro: filtro ?? ''
+  };
 
-    return this.http.get<any>(
-      `${this.url}/api/v1/conta-receber/consultar-conta-receber-paginacao`,
-      { params }
-    );
-  }
+  return this.http.get<any>(
+    `${this.url}/api/v1/conta-receber/consultar-conta-receber-paginacao`,
+    { params }
+  );
+}
 
-  baixarContaReceber(
-    id: string,
-    request: ContaReceberBaixaRequest
-  ): Observable<any> {
+ baixarContaReceber(
+  id: string,
+  request: ContaReceberBaixaRequest
+): Observable<any> {
 
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
-    return this.http.post(
-      `${this.url}/api/v1/conta-receber/baixar-conta-receber/${id}`,
-      request,
-      {
-        headers: token
-          ? { Authorization: `Bearer ${token}` }
-          : {}
-      }
-    );
-  }
+  const url =
+    `${this.url}/api/v1/conta-receber/baixar-conta-receber/${id}`;
+
+  console.log('====================================');
+  console.log('BAIXAR CONTA RECEBER');
+  console.log('ID:', id);
+  console.log('URL:', url);
+  console.log('REQUEST:', request);
+  console.log('====================================');
+
+  return this.http.post(
+    url,
+    request,
+    {
+      headers: token
+        ? { Authorization: `Bearer ${token}` }
+        : {}
+    }
+  );
+}
+  consultarContasReceberAgrupado() {
+  return this.http.get<any[]>(
+    `${this.url}/api/v1/conta-receber/conta-receber-agrupado`
+  );
+}
+obterContaReceberPorId(
+  id: string
+): Observable<ContaReceberResponse> {
+
+  const token = localStorage.getItem('token');
+
+  return this.http.get<ContaReceberResponse>(
+    `${this.url}/api/v1/conta-receber/obter-conta-receber-por-id/${id}`,
+    {
+      headers: token
+        ? { Authorization: `Bearer ${token}` }
+        : {}
+    }
+  );
+}
+
+
 }

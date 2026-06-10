@@ -184,32 +184,65 @@
 				</ul>
 
 			</li>
-			<li class="sidebar-item" *ngIf="access.hasNivel('Super Administrador','Administrador')">
+			
+	<li class="sidebar-item">
+    <a data-bs-target="#financeiro" data-bs-toggle="collapse" class="sidebar-link collapsed">
+        <i class="align-middle fas fa-wallet"></i>
+        <span class="align-middle">Financeiro</span>
+    </a>
 
-				<a data-bs-target="#contratos" data-bs-toggle="collapse" class="sidebar-link collapsed">
+    <ul id="financeiro" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
 
-					<i class="fas fa-file-signature align-middle"></i>
-					<span class="align-middle">Contratos</span>
+        <!-- Contratos -->
+        <li class="sidebar-item">
+            <a data-bs-target="#contratos" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                <i class="align-middle fas fa-file-contract"></i>
+                <span class="align-middle">Contratos</span>
+            </a>
 
-				</a>
+            <ul id="contratos" class="sidebar-dropdown list-unstyled collapse">
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin', 'cadastrar-contrato']">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Cadastrar Contrato
+                    </a>
+                </li>
 
-				<ul id="contratos" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin', 'consultar-contratos']">
+                        <i class="fas fa-search me-2"></i>
+                        Consultar Contratos
+                    </a>
+                </li>
+            </ul>
+        </li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" [routerLink]="['/admin', 'cadastrar-contrato']">
-							Cadastrar Contrato
-						</a>
-					</li>
+        <!-- Contas a Receber -->
+        <li class="sidebar-item">
+            <a data-bs-target="#contasReceber" data-bs-toggle="collapse" class="sidebar-link collapsed">
+                <i class="align-middle fas fa-hand-holding-dollar"></i>
+                <span class="align-middle">Contas a Receber</span>
+            </a>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" [routerLink]="['/admin', 'consultar-contratos']">
-							Consultar Contratos
-						</a>
-					</li>
+            <ul id="contasReceber" class="sidebar-dropdown list-unstyled collapse">
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin', 'cadastrar-conta-receber']">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Cadastrar
+                    </a>
+                </li>
 
-				</ul>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin', 'consultar-conta-receber']">
+                        <i class="fas fa-search me-2"></i>
+                        Consultar
+                    </a>
+                </li>
+            </ul>
+        </li>
 
-			</li>
+    </ul>
+</li>
 			<li class="sidebar-item"><a class="sidebar-link collapsed" [routerLink]="['/admin', 'perfil']">
 					<i class="fas fa-user align-middle"></i><span class="align-middle">Perfil</span>
 				</a></li>

@@ -1,4 +1,3 @@
-
 export interface ContaReceberRequest {
   descricao: string;
 
@@ -13,4 +12,11 @@ export interface ContaReceberRequest {
   categoriaFinanceiraId?: string;
 
   centroCustoId?: string;
+
+  tipoConta: number;
+
+  parcelado: boolean;
+
+  quantidadeParcelas?: number;
+  formaRecebimento: number;
 }

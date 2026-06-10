@@ -170,7 +170,7 @@
 
                 <div class="row mb-3">
 
-                    <div class="col-md-12">
+                    <div class="col-md-4">
 
                         <label class="form-label">
                             Contrato
@@ -196,13 +196,13 @@
 
                     </div>
 
-                </div>
+         
 
                 <!-- CATEGORIA E CENTRO CUSTO -->
 
-                <div class="row mb-3">
+           
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
 
                         <label class="form-label">
                             Categoria Financeira
@@ -228,7 +228,7 @@
 
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
 
                         <label class="form-label">
                             Centro de Custo
@@ -253,8 +253,165 @@
                         </select>
 
                     </div>
+                           </div>
+<div class="row mb-3">
 
-                </div>
+  <div class="col-md-4">
+  <label class="form-label">
+    Tipo da Conta
+  </label>
+
+  <select
+    class="form-select"
+    formControlName="tipoConta">
+
+    <option
+      *ngFor="let item of tiposConta"
+      [value]="item.value">
+
+      {{ item.descricao }}
+
+    </option>
+
+  </select>
+</div>
+
+    <div class="col-md-4">
+
+        <label class="form-label">
+            Forma de Cobrança
+        </label>
+
+        <select
+            class="form-select"
+            formControlName="parcelado">
+
+            <option [ngValue]="false">
+                À Vista
+            </option>
+
+            <option [ngValue]="true">
+                Parcelado
+            </option>
+
+        </select>
+
+    </div>
+
+    <div
+        class="col-md-4"
+        *ngIf="form.get('parcelado')?.value">
+
+        <label class="form-label">
+            Quantidade de Parcelas
+        </label>
+
+        <input
+            type="number"
+            min="2"
+            class="form-control"
+            formControlName="quantidadeParcelas">
+
+    </div>
+
+</div>
+<div class="col-md-4">
+  <label class="form-label">
+    Forma de Recebimento
+  </label>
+
+  <select
+    class="form-select"
+    formControlName="formaRecebimento">
+
+    <option
+      *ngFor="let item of formasRecebimento"
+      [value]="item.value">
+
+      {{ item.descricao }}
+
+    </option>
+
+  </select>
+  <div class="mt-2">
+
+  <!-- Troque formaRecebimento.Pix por FormaRecebimentoEnum.Pix -->
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.Pix">
+    <i class="fas fa-qrcode text-success me-2"></i>
+    PIX
+  </span>
+
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.Boleto">
+    <i class="fas fa-barcode text-warning me-2"></i>
+    Boleto
+  </span>
+
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.CartaoCredito">
+    <i class="fas fa-credit-card text-primary me-2"></i>
+    Cartão de Crédito
+  </span>
+
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.CartaoDebito">
+    <i class="fas fa-credit-card text-info me-2"></i>
+    Cartão de Débito
+  </span>
+
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.Transferencia">
+    <i class="fas fa-building-columns text-secondary me-2"></i>
+    Transferência
+  </span>
+
+  <span *ngIf="form.get('formaRecebimento')?.value == FormaRecebimentoEnum.Dinheiro">
+    <i class="fas fa-money-bill-wave text-success me-2"></i>
+    Dinheiro
+  </span>
+
+</div>
+</div>
+<div
+    class="bg-dark text-white border-0 shadow-sm d-flex align-items-center p-3 mt-3 rounded-3 animate__animated animate__fadeIn"
+    *ngIf="form.get('parcelado')?.value">
+
+    <div class="me-3">
+        <i class="fas fa-calculator fs-3 text-warning bg-opacity-10 bg-warning rounded-circle p-2"></i>
+    </div>
+
+    <div class="flex-grow-1">
+        
+        <h6 class="fw-bold mb-2 text-uppercase tracking-wider small text-white-50">
+            Resumo do Parcelamento
+        </h6>
+
+        <div class="row g-3 align-items-center">
+            
+            <div class="col-sm-4">
+                <span class="text-white-50 small d-block">Valor Total:</span>
+                <span class="fs-5 fw-semibold text-white">
+                    {{ form.get('valor')?.value | currency:'BRL' }}
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <span class="text-white-50 small d-block">Quantidade:</span>
+                <span class="fs-5 fw-semibold text-info">
+                    {{ form.get('quantidadeParcelas')?.value }}x
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <span class="text-white-50 small d-block">Valor da Parcela:</span>
+                <span class="fs-4 fw-bold text-success" style="color: #2ecc71 !important;">
+                    {{ valorParcela }}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 
                 <!-- BOTÃO -->
 

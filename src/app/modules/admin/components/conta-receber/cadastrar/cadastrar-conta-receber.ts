@@ -31,8 +31,12 @@ import { PessoaResumo } from '../../../../../core/models/pessoa/pessoa-resumo';
 import { ContratoResponse } from '../../../../../core/models/contrato/contrato-response';
 import { CentroCustoResponse } from '../../../../../core/models/centro-custo/centro-custo-response';
 import { CategoriaFinanceiraResponse } from '../../../../../core/models/categoria-financeira/categoria-financeira-response';
+import { ContaReceberRequest } from '../../../../../core/models/contas/conta-receber-request';
+import { TipoContaReceber } from '../../../../../core/models/enums/conta/tipo-conta-receberEnum';
+import { FormaRecebimento } from '../../../../../core/models/enums/conta/forma-recebimentoEnum';
 
-import { ContaReceberRequest } from '../../../../../core/models/conta-receber/conta-receber-request';
+
+
 
 @Component({
   selector: 'app-cadastrar-conta-receber',
@@ -54,7 +58,7 @@ export class CadastrarContaReceber implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   carregando = false;
-
+FormaRecebimentoEnum = FormaRecebimento;
   mensagemErro: string[] = [];
   mensagemSucesso: string[] = [];
 
@@ -64,32 +68,83 @@ export class CadastrarContaReceber implements OnInit {
   contratos: ContratoResponse[] = [];
   categorias: CategoriaFinanceiraResponse[] = [];
   centrosCusto: CentroCustoResponse[] = [];
+  tiposConta = [
+    {
+      value: TipoContaReceber.Mensalidade,
+      descricao: 'Mensalidade'
+    },
+    {
+      value: TipoContaReceber.Honorario,
+      descricao: 'Honorários'
+    },
+    {
+      value: TipoContaReceber.Contrato,
+      descricao: 'Contrato'
+    },
+    {
+      value: TipoContaReceber.Taxa,
+      descricao: 'Taxa'
+    },
+    {
+      value: TipoContaReceber.Outro,
+      descricao: 'Outro'
+    }
+  ];
 
+  formasRecebimento = [
+    {
+      value: FormaRecebimento.Pix,
+      descricao: 'PIX'
+    },
+    {
+      value: FormaRecebimento.Boleto,
+      descricao: 'Boleto'
+    },
+    {
+      value: FormaRecebimento.CartaoCredito,
+      descricao: 'Cartão de Crédito'
+    },
+    {
+      value: FormaRecebimento.CartaoDebito,
+      descricao: 'Cartão de Débito'
+    },
+    {
+      value: FormaRecebimento.Transferencia,
+      descricao: 'Transferência'
+    },
+    {
+      value: FormaRecebimento.Dinheiro,
+      descricao: 'Dinheiro'
+    }
+  ];
   form = this.builder.group({
 
-    descricao: [
-      '',
-      [
-        Validators.required,
-        Validators.maxLength(250)
-      ]
-    ],
+    descricao: ['', Validators.required],
 
-    valor: [
-      0,
+    valor: [0, Validators.required],
+
+    dataVencimento: ['', Validators.required],
+
+    pessoaId: [''],
+
+    contratoId: [null],
+
+    categoriaFinanceiraId: [null],
+
+    centroCustoId: [null],
+
+    tipoConta: [
+      TipoContaReceber.Contrato,
       Validators.required
     ],
 
-    dataVencimento: [
-      '',
+    formaRecebimento: [
+      FormaRecebimento.Pix,
       Validators.required
     ],
 
-    contratoId: [''],
-
-    categoriaFinanceiraId: [''],
-
-    centroCustoId: ['']
+    parcelado: [false],
+    quantidadeParcelas: this.builder.control<number | null>(null)
 
   });
 
@@ -99,16 +154,40 @@ export class CadastrarContaReceber implements OnInit {
     this.carregarCategorias();
     this.carregarCentrosCusto();
 
+    this.form.get('parcelado')
+      ?.valueChanges
+      .subscribe(parcelado => {
+
+        if (parcelado) {
+
+          this.form.patchValue({
+            quantidadeParcelas: 2
+          });
+
+        } else {
+
+          this.form.patchValue({
+            quantidadeParcelas: null
+          });
+
+        }
+
+      });
+
   }
 
   get podeEnviar(): boolean {
 
-    return (
-      this.form.valid &&
-      this.clienteSelecionado != null &&
-      !this.carregando
-    );
+    const parcelado =
+      this.form.get('parcelado')?.value;
 
+    const parcelas =
+      this.form.get('quantidadeParcelas')?.value;
+
+    if (parcelado && (!parcelas || parcelas <= 1))
+      return false;
+
+    return this.form.valid && !this.carregando;
   }
 
   // ===================================
@@ -222,13 +301,14 @@ export class CadastrarContaReceber implements OnInit {
 
     const request: ContaReceberRequest = {
 
-      descricao: this.form.value.descricao!,
+      descricao:
+        this.form.value.descricao?.trim() ?? '',
 
-      valor: Number(this.form.value.valor),
+      valor:
+        Number(this.form.value.valor),
 
-      dataVencimento: new Date(
-        this.form.value.dataVencimento!
-      ),
+      dataVencimento:
+        new Date(this.form.value.dataVencimento!),
 
       pessoaId: this.clienteSelecionado.id,
 
@@ -239,8 +319,21 @@ export class CadastrarContaReceber implements OnInit {
         this.form.value.categoriaFinanceiraId || undefined,
 
       centroCustoId:
-        this.form.value.centroCustoId || undefined
+        this.form.value.centroCustoId || undefined,
 
+      tipoConta:
+        Number(this.form.value.tipoConta),
+
+      formaRecebimento:
+        Number(this.form.value.formaRecebimento),
+
+      parcelado:
+        this.form.value.parcelado ?? false,
+
+      quantidadeParcelas:
+        this.form.value.parcelado
+          ? Number(this.form.value.quantidadeParcelas)
+          : undefined
     };
 
     this.contaReceberService
@@ -370,18 +463,83 @@ export class CadastrarContaReceber implements OnInit {
   // ===================================
   // RESET
   // ===================================
-
   private resetar() {
 
     this.form.reset({
 
-      valor: 0
+      valor: 0,
+
+      parcelado: false,
+
+      quantidadeParcelas: null,
+
+      tipoConta: 1,
+
+      formaRecebimento: 2
 
     });
 
     this.clienteSelecionado = undefined;
+
     this.clientesFiltrados = [];
 
+  }
+  get simulacaoParcelas() {
+
+    const valor =
+      Number(this.form.get('valor')?.value ?? 0);
+
+    const qtd =
+      Number(this.form.get('quantidadeParcelas')?.value ?? 1);
+
+    const data =
+      this.form.get('dataVencimento')?.value;
+
+    if (!data || qtd <= 0)
+      return [];
+
+    const valorParcela =
+      Number((valor / qtd).toFixed(2));
+
+    const parcelas = [];
+
+    for (let i = 0; i < qtd; i++) {
+
+      const vencimento = new Date(data);
+
+      vencimento.setMonth(
+        vencimento.getMonth() + i
+      );
+
+      parcelas.push({
+        numero: i + 1,
+        valor: valorParcela,
+        vencimento
+      });
+    }
+
+    return parcelas;
+  }
+  get valorParcela(): string {
+
+    const valor =
+      Number(this.form.get('valor')?.value ?? 0);
+
+    const qtd =
+      Number(this.form.get('quantidadeParcelas')?.value ?? 1);
+
+    const resultado =
+      qtd > 0
+        ? valor / qtd
+        : valor;
+
+    return resultado.toLocaleString(
+      'pt-BR',
+      {
+        style: 'currency',
+        currency: 'BRL'
+      }
+    );
   }
 
 }
