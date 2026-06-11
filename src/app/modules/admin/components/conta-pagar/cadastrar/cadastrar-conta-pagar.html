@@ -18,29 +18,22 @@
 
     <div class="card-body">
 
-      <!-- ALERTA INFO -->
-        <div
-                class="alert alert-primary border-0 shadow-sm d-flex align-items-center p-3 mb-4 rounded-3 alert-dismissible fade show"
-                role="alert">
+      <!-- ALERTA -->
+      <div class="alert alert-primary border-0 shadow-sm d-flex align-items-center p-3 mb-4 rounded-3 alert-dismissible fade show">
 
-                <div class="me-3">
-                    <i class="fas fa-circle-info fs-4 text-white bg-primary rounded-circle p-2"></i>
-                </div>
+        <div class="me-3">
+          <i class="fas fa-circle-info fs-4 text-white bg-primary rounded-circle p-2"></i>
+        </div>
 
-                <div class="flex-grow-1">
-                    <h6 class="fw-bold mb-0">
-                        Preencha os campos marcados com
-                        <strong>*</strong>.
-                    </h6>
-                </div>
+        <div class="flex-grow-1">
+          <h6 class="fw-bold mb-0">
+            Preencha os campos marcados com <strong>*</strong>.
+          </h6>
+        </div>
 
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
-                </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
-            </div>
+      </div>
 
       <!-- SPINNER -->
       <app-spinner
@@ -72,10 +65,14 @@
         <!-- DESCRIÇÃO -->
         <div class="mb-3">
           <label class="form-label">Descrição *</label>
-          <input type="text" class="form-control" formControlName="descricao">
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="descricao">
 
           <div class="text-danger mt-1"
-            *ngIf="form.get('descricao')?.touched && form.get('descricao')?.errors">
+               *ngIf="form.get('descricao')?.touched && form.get('descricao')?.errors">
             Descrição é obrigatória.
           </div>
         </div>
@@ -95,78 +92,155 @@
           </app-autocomplete-pessoa-unica>
 
           <div class="text-danger mt-1"
-            *ngIf="!fornecedorSelecionado && form.touched">
+               *ngIf="!fornecedorSelecionado && form.touched">
             Selecione um fornecedor.
           </div>
 
         </div>
 
         <!-- VALOR + VENCIMENTO -->
-      <div class="row mb-3">
+        <div class="row mb-3">
 
-                    <div class="col-md-6">
+          <div class="col-md-6">
+            <label class="form-label">Valor *</label>
 
-                        <label class="form-label">
-                            Valor *
-                        </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="valor"
+              (input)="onMoneyInput($event)">
+          </div>
 
-                        <input
-                            type="text"
-                            class="form-control"
-                            formControlName="valor"
-                            (input)="onMoneyInput($event)">
+          <div class="col-md-6">
+            <label class="form-label">Data de Vencimento *</label>
 
-                    </div>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="dataVencimento">
+          </div>
 
-                    <div class="col-md-6">
-
-                        <label class="form-label">
-                            Data de Vencimento *
-                        </label>
-
-                        <input
-                            type="date"
-                            class="form-control"
-                            formControlName="dataVencimento">
-
-                    </div>
-
-                </div>
+        </div>
 
         <!-- CATEGORIA + CENTRO CUSTO -->
         <div class="row mb-3">
 
           <div class="col-md-6">
             <label class="form-label">Categoria Financeira</label>
+
             <select class="form-select" formControlName="categoriaFinanceiraId">
               <option value="">Selecione...</option>
 
               <option *ngFor="let c of categorias" [value]="c.id">
                 {{ c.nome }}
               </option>
-
             </select>
           </div>
 
           <div class="col-md-6">
             <label class="form-label">Centro de Custo</label>
+
             <select class="form-select" formControlName="centroCustoId">
               <option value="">Selecione...</option>
 
               <option *ngFor="let c of centrosCusto" [value]="c.id">
                 {{ c.nome }}
               </option>
-
             </select>
           </div>
 
         </div>
 
+        <!-- PARCELAMENTO -->
+      <!-- PARCELAMENTO -->
+<div class="row mb-3">
+
+  <div class="col-md-4">
+    <label class="form-label">
+      Forma de Pagamento
+    </label>
+
+    <select class="form-select" formControlName="parcelado">
+
+      <option [ngValue]="false">
+        À Vista
+      </option>
+
+      <option [ngValue]="true">
+        Parcelado
+      </option>
+
+    </select>
+
+  </div>
+
+  <div
+    class="col-md-4"
+    *ngIf="form.get('parcelado')?.value">
+
+    <label class="form-label">
+      Quantidade de Parcelas
+    </label>
+
+    <input
+      type="number"
+      min="2"
+      class="form-control"
+      formControlName="quantidadeParcelas">
+
+  </div>
+
+</div>
+
+<!-- RESUMO DO PARCELAMENTO (IGUAL RECEBER) -->
+<div
+  class="bg-dark text-white border-0 shadow-sm d-flex align-items-center p-3 mt-3 rounded-3 animate__animated animate__fadeIn"
+  *ngIf="form.get('parcelado')?.value">
+
+  <div class="me-3">
+    <i class="fas fa-calculator fs-3 text-warning bg-opacity-10 bg-warning rounded-circle p-2"></i>
+  </div>
+
+  <div class="flex-grow-1">
+
+    <h6 class="fw-bold mb-2 text-uppercase small text-white-50">
+      Resumo do Parcelamento
+    </h6>
+
+    <div class="row g-3 align-items-center">
+
+      <div class="col-sm-4">
+        <span class="text-white-50 small d-block">Valor Total:</span>
+        <span class="fs-5 fw-semibold text-white">
+          {{ form.get('valor')?.value | currency:'BRL' }}
+        </span>
+      </div>
+
+      <div class="col-sm-4">
+        <span class="text-white-50 small d-block">Quantidade:</span>
+        <span class="fs-5 fw-semibold text-info">
+          {{ form.get('quantidadeParcelas')?.value }}x
+        </span>
+      </div>
+
+      <div class="col-sm-4">
+        <span class="text-white-50 small d-block">Valor da Parcela:</span>
+        <span class="fs-4 fw-bold text-success">
+          {{ valorParcela }}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
         <!-- BOTÃO -->
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="form.invalid || carregando">
+          [disabled]="!podeEnviar || carregando">
 
           <i class="fas fa-save me-2"></i>
           Salvar Conta a Pagar

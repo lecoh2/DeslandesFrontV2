@@ -55,6 +55,7 @@ import { ConsultarContaReceber } from "./components/conta-receber/consultar/cons
 import { VisualizarContaReceber } from "./components/conta-receber/visualizar/visualizar-conta-receber";
 import { EditarContaReceber } from "./components/conta-receber/editar/editar-conta-receber";
 import { CadastrarContaPagar } from "./components/conta-pagar/cadastrar/cadastrar-conta-pagar";
+import { ConsultarContaPagar } from "./components/conta-pagar/consultar/consultar-conta-pagar";
 
 
 
@@ -102,6 +103,7 @@ import { CadastrarContaPagar } from "./components/conta-pagar/cadastrar/cadastra
         VisualizarContaReceber,
         EditarContaReceber,
         CadastrarContaPagar,
+        ConsultarContaPagar,
       
 
 
