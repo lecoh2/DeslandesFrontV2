@@ -42,6 +42,7 @@ import { CadastrarContaReceber } from "./components/conta-receber/cadastrar/cada
 import { ConsultarContaReceber } from "./components/conta-receber/consultar/consultar-conta-receber";
 import { VisualizarContaReceber } from "./components/conta-receber/visualizar/visualizar-conta-receber";
 import { EditarContaReceber } from "./components/conta-receber/editar/editar-conta-receber";
+import { CadastrarContaPagar } from "./components/conta-pagar/cadastrar/cadastrar-conta-pagar";
 //import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 
 
@@ -263,6 +264,14 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
              },
+             //conta pagar
+             
+            {
+                path: 'cadastrar-conta-pagar',
+                component: CadastrarContaPagar,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+            },
             {
                 path: 'perfil',
                 component: Perfil,
