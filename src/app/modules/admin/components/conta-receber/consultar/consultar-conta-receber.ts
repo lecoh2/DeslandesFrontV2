@@ -16,7 +16,7 @@ export class ConsultarContaReceber implements OnInit {
 
   dataSource = new MatTableDataSource<any>([]);
   consulta: any[] = [];
-
+descricaoSelecionada = '';
   totalRegistros = 0;
   paginaAtual = 1;
   tamanhoPagina = 10;
@@ -36,10 +36,14 @@ export class ConsultarContaReceber implements OnInit {
 visualizar(id: string): void {
 
   this.router.navigate([
-    '/admin/conta-receber/visualizar-conta-receber',
+    '/admin/visualizar-conta-receber',
     id
   ]);
 
+}
+descricaoFormatada(desc: string): string {
+  const text = desc || '';
+  return text.length > 20 ? text.substring(0, 20) + '...' : text;
 }
   ngOnInit(): void {
     this.carregarContas();
@@ -117,7 +121,7 @@ getFormaRecebimentoIcon(tipo: FormaRecebimento): string {
 
   editar(id: string) {
     this.router.navigate([
-      '/admin/conta-receber/editar',
+      '/admin/editar-conta-receber',
       id
     ]);
   }
