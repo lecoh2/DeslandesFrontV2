@@ -68,11 +68,12 @@ descricaoSelecionada = '';
       )
       .subscribe({
         next: (response: any) => {
-
+  console.log('RESPONSE', response);
+  console.log('ITEMS', response.items);
           this.consulta = response.items ?? [];
           this.totalRegistros = response.totalCount ?? 0;
           this.totalPaginas = response.totalPages ?? 1;
-
+ console.log('CONSULTA', this.consulta);
           this.atualizarPaginasVisiveis();
 
           this.carregando = false;
