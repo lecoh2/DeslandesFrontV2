@@ -31,7 +31,6 @@ import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 import { Perfil } from "./components/usuario/perfil/perfil";
 import { EditarUsuario } from "./components/usuario/editar-usuario/editar-usuario";
 import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consultar-usuarios";
-import { ImportarProcessoExcel } from "./components/processo/importar/importar-processo-excel";
 import { CadastrarContrato } from "./components/contrato/cadastrar/cadastrar-contrato";
 import { ConsultarContrato } from "./components/contrato/consultar/consultar-contrato";
 import { CadastrarCentroCusto } from "./components/centro-custo/cadatrar/cadastrar-centro-custo";
@@ -45,6 +44,12 @@ import { EditarContaReceber } from "./components/conta-receber/editar/editar-con
 import { CadastrarContaPagar } from "./components/conta-pagar/cadastrar/cadastrar-conta-pagar";
 import { ConsultarContaPagar } from "./components/conta-pagar/consultar/consultar-conta-pagar";
 import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visualizar-conta-pagar";
+import { DashboardFinanceiro } from "./components/dashboard-financeiro/dashboard-financeiro";
+import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/configuracao-financeira";
+import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
+import { Publicacoes } from "./components/webjur/publicacoes";
+import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
+
 //import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 
 
@@ -93,14 +98,7 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador', 'Administração', 'Coordenador', 'Conciliador', 'Estagiários'] }
 
-            },
-            {
-                path: 'importar-processo-excel',
-                component: ImportarProcessoExcel,
-                canActivate: [AuthGuard, NivelGuard],
-                data: { niveis: ['Super Administrador', 'Administrador', 'Administração', 'Coordenador', 'Conciliador', 'Estagiários'] }
-
-            },
+            },           
             //atendmento
             {
                 path: 'cadastrar-atendimento',
@@ -285,6 +283,18 @@ export const routes: Routes = [
                 component: VisualizarContaPagar,
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+             }
+             ,
+              {
+                path: 'dashboard-financeiro',
+                component: DashboardFinanceiro,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+             },  {
+                path: 'configuracao-financeira',
+                component: ConfiguracaoFinanceira,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
              },
             {
                 path: 'perfil',
@@ -302,6 +312,25 @@ export const routes: Routes = [
             }, {
                 path: 'consultar-centro-custo',
                 component: ConsultarCentroCusto,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+            },
+            //webJur
+
+             {
+                path: 'publicacoes',
+                component: Publicacoes,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+            }
+            , {
+                path: 'consultar-webjur',
+                component: ConsultarWebjur,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+            }, {
+                path: 'detalhe-publicacao/:id',
+                component: DetalhePublicacao,
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
             },

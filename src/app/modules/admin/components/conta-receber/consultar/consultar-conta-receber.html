@@ -16,11 +16,26 @@
           <!-- FILTRO -->
           <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <input type="text"
-                   class="form-control form-control-sm w-50"
-                   placeholder="Pesquisar cliente ou descrição"
-                   [(ngModel)]="filtro"
-                   (keyup.enter)="aplicarFiltro()">
+    <div class="input-group shadow-sm" style="max-width: 450px;">
+
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Pesquisar cliente ou descrição..."
+        [(ngModel)]="filtro"
+        (keyup.enter)="aplicarFiltro()">
+
+    <button
+        class="btn btn-primary"
+        (click)="aplicarFiltro()">
+
+        <i class="fas fa-search me-2"></i>
+        Buscar
+
+    </button>
+
+</div>
+
 
             <div>
               <select class="form-select form-select-sm"

@@ -42,7 +42,6 @@ import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 import { Perfil } from "./components/usuario/perfil/perfil";
 import { EditarUsuario } from "./components/usuario/editar-usuario/editar-usuario";
 import { ConsultarUsuarios } from "./components/usuario/consultar-usuarios/consultar-usuarios";
-import { ImportarProcessoExcel } from "./components/processo/importar/importar-processo-excel";
 import { CadastrarContrato } from "./components/contrato/cadastrar/cadastrar-contrato";
 import { CadastrarCentroCusto } from "./components/centro-custo/cadatrar/cadastrar-centro-custo";
 import { ConsultarCentroCusto } from "./components/centro-custo/consultar/consultar-centro-custo";
@@ -57,6 +56,13 @@ import { EditarContaReceber } from "./components/conta-receber/editar/editar-con
 import { CadastrarContaPagar } from "./components/conta-pagar/cadastrar/cadastrar-conta-pagar";
 import { ConsultarContaPagar } from "./components/conta-pagar/consultar/consultar-conta-pagar";
 import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visualizar-conta-pagar";
+import { DashboardFinanceiro } from "./components/dashboard-financeiro/dashboard-financeiro";
+import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/configuracao-financeira";
+import { Publicacoes } from "./components/webjur/publicacoes";
+import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
+import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
+
+
 
 
 
@@ -75,7 +81,6 @@ import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visual
         CadastrarProcesso,
         ConsultarProcesso,
         EditarProcesso,
-        ImportarProcessoExcel,
         CadastrarAtendimento,
         ConsultarAtendimento,
         EditarAtendimento,
@@ -106,6 +111,11 @@ import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visual
         CadastrarContaPagar,
         ConsultarContaPagar,
         VisualizarContaPagar,
+        DashboardFinanceiro,
+        ConfiguracaoFinanceira,
+        Publicacoes,
+        ConsultarWebjur,
+        DetalhePublicacao,
       
 
 

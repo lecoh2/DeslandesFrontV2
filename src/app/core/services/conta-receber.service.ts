@@ -76,24 +76,17 @@ export class ContaReceberService {
     );
   }
 
-consultarContasReceberPaginado(
-  pageNumber: number,
-  pageSize: number,
-  filtro: string = ''
-) {
-
-  const params: any = {
-    pageNumber: pageNumber.toString(),
-    pageSize: pageSize.toString(),
-    filtro: filtro ?? ''
-  };
+consultarContasReceberPaginado(pageNumber: number, pageSize: number, searchTerm?: string){
+ const params: any = { pageNumber: pageNumber.toString(), pageSize: pageSize.toString() };
+  if (searchTerm) params.searchTerm = searchTerm;
 
   return this.http.get<any>(
     `${this.url}/api/v1/conta-receber/consultar-conta-receber-paginacao`,
     { params }
   );
-}
 
+  }
+  
  baixarContaReceber(
   id: string,
   request: ContaReceberBaixaRequest

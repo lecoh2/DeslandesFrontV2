@@ -1,0 +1,448 @@
+<div class="container-fluid">
+
+  <!-- FILTRO -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+          <label class="form-label">Ano</label>
+
+          <select class="form-select" [(ngModel)]="anoAtual">
+
+            <option *ngFor="let ano of anos" [value]="ano">
+
+              {{ ano }}
+
+            </option>
+
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Mês</label>
+
+          <select class="form-select" [(ngModel)]="mesAtual">
+
+            <option *ngFor="let mes of meses" [value]="mes.id">
+
+              {{ mes.nome }}
+
+            </option>
+
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100" (click)="pesquisar()">
+
+            <i class="fas fa-search me-2"></i>
+            Filtrar
+
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="row">
+
+    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+      <div class="card flex-fill">
+        <div class="card-body">
+
+  <div class="row">
+
+    <div class="col mt-0">
+
+      <h5 class="card-title">
+        Receita
+      </h5>
+
+    </div>
+
+    <div class="col-auto">
+
+      <div class="stat text-success">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+
+    </div>
+
+  </div>
+
+  <h1 class="mt-1 mb-3">
+    R$ {{ formatarMoeda(dashboard?.totalRecebidoMes) }}
+  </h1>
+
+</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+      <div class="card flex-fill">
+   <div class="card-body">
+
+  <div class="row">
+
+    <div class="col mt-0">
+      <h5 class="card-title">Despesa</h5>
+    </div>
+
+    <div class="col-auto">
+      <div class="stat text-danger">
+        <i class="fas fa-file-invoice-dollar"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <h1 class="mt-1 mb-3">
+    R$ {{ formatarMoeda(dashboard?.totalPagoMes) }}
+  </h1>
+
+</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+      <div class="card flex-fill">
+    <div class="card-body">
+
+  <div class="row">
+
+    <div class="col mt-0">
+      <h5 class="card-title">Saldo</h5>
+    </div>
+
+    <div class="col-auto">
+      <div class="stat text-primary">
+        <i class="fas fa-wallet"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <h1 class="mt-1 mb-3">
+    R$ {{ formatarMoeda(dashboard?.saldoMes) }}
+  </h1>
+
+</div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+      <div class="card flex-fill">
+     <div class="card-body">
+
+  <div class="row">
+
+    <div class="col mt-0">
+      <h5 class="card-title">Inadimplência</h5>
+    </div>
+
+    <div class="col-auto">
+      <div class="stat text-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <h1 class="mt-1 mb-3">
+    {{ dashboard?.inadimplencia ?? 0 }}%
+  </h1>
+
+</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- META -->
+<div class="card mt-4">
+
+  <div class="card-header">
+    <h5 class="mb-0">
+      <i class="fas fa-bullseye me-2"></i>
+      Meta Financeira
+    </h5>
+  </div>
+
+  <div class="card-body">
+
+    <!-- Metas -->
+    <div class="row text-center mb-3">
+
+      <div class="col-md-6 border-end">
+
+        <small class="text-muted d-block">
+          Meta Mensal
+        </small>
+
+        <h5 class="mb-0 text-primary">
+          R$ {{ formatarMoeda(dashboard?.metaMensal) }}
+        </h5>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <small class="text-muted d-block">
+          Meta Anual
+        </small>
+
+        <h5 class="mb-0 text-info">
+          R$ {{ formatarMoeda(dashboard?.metaAnual) }}
+        </h5>
+
+      </div>
+
+    </div>
+
+    <!-- Percentual -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+      <span class="fw-semibold">
+        Progresso da Meta
+      </span>
+
+      <span class="badge bg-success fs-6">
+        {{ dashboard?.percentualMeta }}%
+      </span>
+
+    </div>
+
+    <!-- Barra -->
+    <div class="progress" style="height: 25px;">
+
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+        role="progressbar"
+        [style.width]="percentualMetaBarra">
+
+        {{ dashboard?.percentualMeta }}%
+
+      </div>
+
+    </div>
+
+    <!-- Origem -->
+    <div class="mt-3 text-center">
+
+      <small class="text-muted">
+
+        <i
+          class="fas"
+          [class.fa-robot]="dashboard?.metaAutomatica"
+          [class.fa-user-cog]="!dashboard?.metaAutomatica">
+        </i>
+
+        {{ dashboard?.metaAutomatica
+            ? ' Meta calculada automaticamente'
+            : ' Meta definida manualmente nas configurações' }}
+
+      </small>
+
+    </div>
+
+  </div>
+
+</div>
+
+  <!-- GRÁFICOS -->
+  <div class="row mt-4">
+
+    <div class="col-lg-8 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5>Receitas x Despesas</h5>
+        </div>
+
+        <div class="card-body">
+          <canvas id="fluxoCaixaChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5>Despesas por Categoria</h5>
+        </div>
+
+        <div class="card-body">
+          <canvas id="categoriasChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="card mt-4">
+
+  <div class="card-header">
+
+    <h5>
+      <i class="fas fa-chart-line me-2"></i>
+      Fluxo Previsto x Realizado
+    </h5>
+
+  </div>
+
+  <div class="card-body">
+
+    <canvas
+      id="fluxoPrevistoRealizadoChart">
+    </canvas>
+
+  </div>
+
+</div>
+<div class="card mt-4">
+
+  <div class="card-header">
+    <h5 class="mb-0">
+      <i class="fas fa-calendar-alt me-2 text-primary"></i>
+      Fluxo de Caixa Futuro
+    </h5>
+  </div>
+
+  <div class="card-body">
+
+    <div class="row">
+
+      <div class="col-md-4"
+           *ngFor="let item of dashboard?.fluxoCaixaFuturo">
+
+        <div class="border rounded-3 p-3 mb-3 shadow-sm ">
+
+          <!-- PERÍODO -->
+          <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-calendar-day text-secondary me-2"></i>
+            <h6 class="mb-0 fw-bold">
+              {{ item.periodo }}
+            </h6>
+          </div>
+
+          <hr class="my-2">
+
+          <!-- ENTRADAS -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-success">
+              <i class="fas fa-arrow-down me-1"></i>
+              Entradas
+            </span>
+
+            <strong class="text-success">
+              {{ item.entradas | currency:'BRL' }}
+            </strong>
+          </div>
+
+          <!-- SAÍDAS -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-danger">
+              <i class="fas fa-arrow-up me-1"></i>
+              Saídas
+            </span>
+
+            <strong class="text-danger">
+              {{ item.saidas | currency:'BRL' }}
+            </strong>
+          </div>
+
+          <hr class="my-2">
+
+          <!-- SALDO -->
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">
+              <i class="fas fa-wallet me-1 text-primary"></i>
+              Saldo
+            </span>
+
+            <span class="fw-bold"
+                  [ngClass]="item.saldo >= 0 ? 'text-success' : 'text-danger'">
+
+              {{ item.saldo | currency:'BRL' }}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="card mt-4">
+  <div class="card-header">
+    <h5 class="mb-0">Fluxo de Caixa Projetado (90 dias)</h5>
+  </div>
+
+  <div class="card-body">
+    <div style="height: 320px;">
+      <canvas id="fluxoProjetadoChart"></canvas>
+    </div>
+  </div>
+</div>
+  <!-- MOVIMENTAÇÕES -->
+  <div class="card mt-4">
+
+    <div class="card-header">
+      <h5 class="mb-0">Últimas movimentações</h5>
+    </div>
+
+    <div class="table-responsive">
+
+      <table class="table table-hover mb-0">
+
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Pessoa</th>
+            <th>Descrição</th>
+            <th class="text-end">Valor</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of dashboard?.ultimasMovimentacoes">
+
+            <td>{{ item.data | date:'dd/MM/yyyy' }}</td>
+
+            <td>
+
+              <span class="badge" [class.bg-success]="item.tipo === 'Receita'"
+                [class.bg-danger]="item.tipo === 'Despesa'">
+
+                {{ item.tipo }}
+
+              </span>
+
+            </td>
+
+            <td>{{ item.pessoa }}</td>
+
+            <td>{{ item.descricao }}</td>
+
+            <td class="text-end">
+              R$ {{ formatarMoeda(item.valor) }}
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

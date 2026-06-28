@@ -15,7 +15,6 @@ export class ConsultarContrato implements OnInit {
   displayedColumns: string[] = [
     'numero',
     'nomePessoa',
-    'valorContrato',
     'dataInicio',
     'acoes'
   ];

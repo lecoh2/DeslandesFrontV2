@@ -1,0 +1,290 @@
+/* =======================================================
+   PAINEL WEBJUR
+======================================================= */
+
+.card {
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .75rem 2rem rgba(0,0,0,.12);
+}
+
+.card-header{
+  font-weight:600;
+  letter-spacing:.4px;
+}
+
+/* =======================================================
+   CABEÇALHO
+======================================================= */
+
+h1{
+  font-weight:700;
+}
+
+.text-muted{
+  font-size:.92rem;
+}
+
+/* =======================================================
+   TEXTO DA PUBLICAÇÃO
+======================================================= */
+
+.publicacao-texto{
+
+  white-space: pre-wrap;
+
+  line-height:1.9;
+
+  font-size:15px;
+
+  padding:20px;
+
+
+
+  border-left:5px solid #0d6efd;
+
+  border-radius:8px;
+
+}
+
+/* =======================================================
+   TIMELINE
+======================================================= */
+
+.timeline{
+
+  position:relative;
+
+  margin-left:20px;
+
+  padding-left:40px;
+
+}
+
+.timeline:before{
+
+  content:"";
+
+  position:absolute;
+
+  left:12px;
+
+  top:0;
+
+  bottom:0;
+
+  width:3px;
+
+ /* background:#dee2e6;*/
+
+}
+
+.timeline-item{
+
+  position:relative;
+
+  margin-bottom:35px;
+
+}
+
+.timeline-icon{
+
+  position:absolute;
+
+  left:-38px;
+
+  width:24px;
+
+  height:24px;
+
+  border-radius:50%;
+
+  background:#0d6efd;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:#fff;
+
+  font-size:9px;
+
+  box-shadow:0 0 0 5px white;
+
+}
+
+.timeline-content{
+
+  background:white;
+
+  border-radius:12px;
+
+  padding:18px;
+
+  border:1px solid #e9ecef;
+
+}
+
+/* =======================================================
+   COMENTÁRIOS
+======================================================= */
+
+textarea{
+
+  resize:none;
+
+}
+
+.border-start{
+
+  transition:.2s;
+
+}
+
+.border-start:hover{
+
+  transform:translateX(6px);
+
+}
+
+.card-body strong{
+
+  font-weight:600;
+
+}
+
+/* =======================================================
+   TABELAS
+======================================================= */
+
+.table{
+
+  margin-bottom:0;
+
+}
+
+.table thead{
+
+  /*background:#f8f9fa;*/
+
+}
+
+.table-hover tbody tr:hover{
+
+  /*background:#f6f9ff;*/
+
+}
+
+/* =======================================================
+   BADGES
+======================================================= */
+
+.badge{
+
+  font-size:.75rem;
+
+  padding:.45rem .7rem;
+
+}
+
+/* =======================================================
+   BOTÕES
+======================================================= */
+
+.btn{
+
+  border-radius:8px;
+
+  transition:.2s;
+
+}
+
+.btn:hover{
+
+  transform:translateY(-2px);
+
+}
+
+/* =======================================================
+   LIST GROUP
+======================================================= */
+
+.list-group-item{
+
+  border:0;
+
+  border-bottom:1px solid #eee;
+
+}
+
+/* =======================================================
+   ÍCONES
+======================================================= */
+
+.fa-comments{
+  color:#198754;
+}
+
+.fa-stream{
+  color:#0d6efd;
+}
+
+.fa-paperclip{
+  color:#ffc107;
+}
+
+.fa-eye{
+  color:#0dcaf0;
+}
+
+.fa-sync-alt{
+  color:#6f42c1;
+}
+
+/* =======================================================
+   RESPONSIVO
+======================================================= */
+
+@media(max-width:992px){
+
+  .timeline{
+
+    margin-left:0;
+
+    padding-left:25px;
+
+  }
+
+  .timeline-icon{
+
+    left:-22px;
+
+  }
+
+}
+
+@media(max-width:768px){
+
+  .btn{
+
+    width:100%;
+
+    margin-bottom:10px;
+
+  }
+
+  .d-flex.gap-2{
+
+    flex-direction:column;
+
+  }
+
+}

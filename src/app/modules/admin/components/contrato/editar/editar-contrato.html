@@ -58,17 +58,15 @@
                 <!-- NÚMERO + CLIENTE -->
                 <div class="row mb-3">
 
-                    <div class="col-md-4">
+                 <div class="col-md-4">
                         <label class="form-label">Número *</label>
-                        <input class="form-control" formControlName="numero">
+                        <input class="form-control" formControlName="numero" mask="00000-0000" placeholder="00000-0000">
                     </div>
-
                     <div class="text-danger mt-1" *ngIf="form.get('numero')?.touched && form.get('numero')?.errors">
                         <div *ngIf="form.get('numero')?.errors?.['required']">
                             O número do contrato é obrigatório.
                         </div>
                     </div>
-
                     <div class="col-md-8">
 
                         <app-autocomplete-pessoa-unica label="Cliente *" placeholder="Digite o cliente"
@@ -130,19 +128,10 @@
                     </div>
                 </div>
 
-                <!-- VALORES -->
+             
                 <div class="row mb-3 mt-4">
 
-                    <div class="col-md-4">
-                        <label class="form-label">Valor *</label>
 
-<input
-  type="text"
-  class="form-control"
-  formControlName="valorContrato"
-  (input)="onMoneyInput($event)"
-/>
-                    </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Data Início *</label>
@@ -234,15 +223,11 @@
 
               <div>
 
-                <span class="text-danger text-decoration-line-through">
-                  {{ formatarValor(m.antes, m.campo) }}
-                </span>
+              
 
-                <i class="fas fa-arrow-right mx-2"></i>
+           
 
-                <span class="text-success">
-                  {{ formatarValor(m.depois, m.campo) }}
-                </span>
+             
 
               </div>
 

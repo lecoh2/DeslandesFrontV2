@@ -37,7 +37,7 @@ export class CadastrarContrato implements OnInit {
 
   form = this.builder.group({
     numero: ['', Validators.required],
-     valorContrato: [0, Validators.required],
+   
     dataInicio: ['', Validators.required],
     dataFim: [''],
   });
@@ -118,12 +118,12 @@ onSubmit(): void {
     this.cdr.detectChanges();
   });
 
- const rawValor = (this.form.value.valorContrato ?? '').toString();
+
 
   const request: ContratoRequest = {
     numero: this.form.value.numero!,
     pessoaId: this.clienteSelecionado.id,
-    valorTotal: this.converterMoedaParaDecimal(rawValor),
+
     dataInicio: new Date(this.form.value.dataInicio!),
     dataFim: this.form.value.dataFim
       ? new Date(this.form.value.dataFim)
@@ -188,10 +188,7 @@ onSubmit(): void {
 
   let value = event.target.value.replace(/\D/g, '');
 
-  if (!value) {
-    this.form.get('valorContrato')?.setValue(0, { emitEvent: false });
-    return;
-  }
+
 
   const numericValue = Number(value);
 
@@ -200,11 +197,7 @@ onSubmit(): void {
     maximumFractionDigits: 2
   }).format(numericValue / 100);
 
-  // atualiza o FORM (valor real)
-  this.form.get('valorContrato')?.setValue(numericValue / 100, {
-    emitEvent: false
-  });
-
+ 
   // atualiza o INPUT visual
   event.target.value = formatted;
 }
@@ -214,9 +207,7 @@ onSubmit(): void {
   // =========================
    private resetar() {
 
-        this.form.reset({
-        valorContrato: 0
-    });
+   
 
         this.clienteSelecionado = undefined;
         this.clientesFiltrados = [];
@@ -228,25 +219,6 @@ onSubmit(): void {
   // =========================
   // MOEDA
   // =========================
-  formatarMoeda(event: any) {
 
-    let valor = event.target.value.replace(/\D/g, '');
-
-    valor = (Number(valor) / 100).toFixed(2) + '';
-    valor = valor.replace('.', ',');
-    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-    event.target.value = valor;
-  }
-    private converterMoedaParaDecimal(valor: any): number {
-
-        if (!valor) return 0;
-
-        const limpo = String(valor)
-            .replace(/\./g, '')
-            .replace(',', '.')
-            .trim();
-
-        return parseFloat(limpo);
-    }
+  
 }

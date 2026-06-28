@@ -1,0 +1,110 @@
+<div class="container-fluid p-0">
+
+  <h1 class="h3 mb-3">
+    Configuração Financeira
+  </h1>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h5 class="card-title">
+        Metas Financeiras
+      </h5>
+
+      <h6 class="card-subtitle text-muted">
+        Configure as metas do escritório
+      </h6>
+
+    </div>
+
+    <div class="card-body">
+
+      <!-- Spinner -->
+
+      <app-spinner
+        *ngIf="carregando"
+        [show]="true"
+        message="Salvando configuração...">
+      </app-spinner>
+
+      <!-- Sucesso -->
+
+      <app-alerts
+        *ngIf="mensagemSucesso.length"
+        titulo="Sucesso!"
+        [mensagens]="mensagemSucesso"
+        tipo="success"
+        icone="fas fa-check-circle">
+      </app-alerts>
+
+      <!-- Erro -->
+
+      <app-alerts
+        *ngIf="mensagemErro.length"
+        titulo="Erro!"
+        [mensagens]="mensagemErro"
+        tipo="danger"
+        icone="fas fa-times-circle">
+      </app-alerts>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()">
+
+        <div class="row">
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+
+              Meta Mensal
+
+            </label>
+
+           <input
+  type="text"
+  class="form-control"
+  formControlName="metaMensal"
+  (input)="onMoneyInput($event, 'metaMensal')">
+
+          </div>
+
+          <div class="col-md-6">
+
+            <label class="form-label">
+
+              Meta Anual
+
+            </label>
+
+         <input
+  type="text"
+  class="form-control"
+  formControlName="metaAnual"
+  (input)="onMoneyInput($event, 'metaAnual')">
+
+          </div>
+
+        </div>
+
+        <hr>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="carregando">
+
+          <i class="fas fa-save me-2"></i>
+
+          Salvar Configuração
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

@@ -75,20 +75,11 @@ export class ContaPagarService {
     );
   }
 
-  consultarContasPagarPaginado(
-    pageNumber: number,
-    pageSize: number,
-    filtro: string = ''
-  ) {
+  consultarContasPagarPaginado(pageNumber: number, pageSize: number, searchTerm?: string) {
+     const params: any = { pageNumber: pageNumber.toString(), pageSize: pageSize.toString() };
 
-    const params: any = {
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
-      filtro: filtro ?? ''
-    };
-
-    return this.http.get<any>(
-      `${this.url}/api/v1/conta-pagar/consultar-conta-pagar-paginacao`,
+     if (searchTerm) params.searchTerm = searchTerm;
+        return this.http.get<any>(`${this.url}/api/v1/conta-pagar/consultar-conta-pagar-paginacao`,
       { params }
     );
   }

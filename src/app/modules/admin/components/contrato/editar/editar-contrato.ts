@@ -53,7 +53,6 @@ export class EditarContrato implements OnInit {
 
     form = this.builder.group({
         numero: ['', Validators.required],
-        valorContrato: [0, Validators.required],
         dataInicio: ['', Validators.required],
         dataFim: [''],
         observacao: ['']
@@ -95,7 +94,6 @@ export class EditarContrato implements OnInit {
 
                     this.form.patchValue({
                         numero: res.numero,
-                        valorContrato: res.valorTotal?.toString(),
                         dataInicio: res.dataInicio?.substring(0, 10),
                         dataFim: res.dataFim?.substring(0, 10),
                     });
@@ -186,12 +184,12 @@ export class EditarContrato implements OnInit {
             this.cdr.detectChanges();
         });
 
-        const rawValor = (this.form.value.valorContrato ?? '').toString();
-        console.log('VALOR RAW:', this.form.value.valorContrato);
+       
+    
         const request: ContratoRequest = {
             numero: this.form.value.numero!,
             pessoaId: this.clienteSelecionado.id,
-            valorTotal: this.converterMoedaParaDecimal(rawValor),
+         
             dataInicio: new Date(this.form.value.dataInicio!),
             dataFim: this.form.value.dataFim
                 ? new Date(this.form.value.dataFim)
@@ -239,23 +237,10 @@ export class EditarContrato implements OnInit {
                 }
             });
     }
-    private converterMoedaParaDecimal(valor: any): number {
-
-        if (!valor) return 0;
-
-        const limpo = String(valor)
-            .replace(/\./g, '')
-            .replace(',', '.')
-            .trim();
-
-        return parseFloat(limpo);
-    }
-
+  
     private resetar() {
 
-        this.form.reset({
-        valorContrato: 0
-    });
+
 
         this.clienteSelecionado = undefined;
         this.clientesFiltrados = [];
@@ -297,16 +282,7 @@ export class EditarContrato implements OnInit {
     // =========================
     // MOEDA
     // =========================
-    formatarMoeda(event: any) {
 
-        let valor = event.target.value.replace(/\D/g, '');
-
-        valor = (Number(valor) / 100).toFixed(2) + '';
-        valor = valor.replace('.', ',');
-        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-        event.target.value = valor;
-    }
     abrirHistoricoProcesso(contratoId: string) {
 
         this.carregandoHistorico = true;
@@ -353,48 +329,8 @@ export class EditarContrato implements OnInit {
         });
 
         return mudancas;
-    } formatarValor(valor: any, campo: string): string {
-
-  if (valor === null || valor === undefined) return '-';
-
-  if (Array.isArray(valor)) {
-    return valor.join(', ');
-  }
-
-  if (typeof valor === 'boolean') {
-    return valor ? 'Sim' : 'Não';
-  }
-
-  if (campo.toLowerCase().includes('data')) {
-    return new Date(valor).toLocaleDateString('pt-BR');
-  }
-
-  return valor.toString();
-}
-   onMoneyInput(event: any) {
-
-  let value = event.target.value.replace(/\D/g, '');
-
-  if (!value) {
-    this.form.get('valorContrato')?.setValue(0, { emitEvent: false });
-    return;
-  }
-
-  const numericValue = Number(value);
-
-  const formatted = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(numericValue / 100);
-
-  // atualiza o FORM (valor real)
-  this.form.get('valorContrato')?.setValue(numericValue / 100, {
-    emitEvent: false
-  });
-
-  // atualiza o INPUT visual
-  event.target.value = formatted;
-}
+    } 
+ 
     formatarCampo(campo: string): string {
 
         const map: any = {
@@ -405,7 +341,6 @@ export class EditarContrato implements OnInit {
             Numero: 'Número do Contrato',
             PessoaId: 'Cliente',
             NomePessoa: 'Nome do Cliente',
-            ValorTotal: 'Valor Total',
             DataInicio: 'Data de Início',
             DataFim: 'Data de Fim',
             Status: 'Status',

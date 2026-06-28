@@ -29,7 +29,7 @@
                 </button>
 
             </div>
-            
+
             <app-spinner *ngIf="carregando" [show]="true" message="Salvando contrato...">
             </app-spinner>
 
@@ -55,7 +55,7 @@
                             O número do contrato é obrigatório.
                         </div>
                     </div>
-               
+
                     <div class="col-md-8">
 
                         <app-autocomplete-pessoa-unica label="Cliente *" placeholder="Digite o cliente"
@@ -131,22 +131,7 @@
                 <!-- VALORES -->
                 <div class="row mb-3">
 
-                    <div class="col-md-4">
-                        <label class="form-label">Valor *</label>
-<input
-  type="text"
-  class="form-control"
-  formControlName="valorContrato"
-  (input)="onMoneyInput($event)"
-/>
-       
-                    </div>
-                    <div class="text-danger mt-1"
-                        *ngIf="form.get('valorContrato')?.touched && form.get('valorContrato')?.errors">
-                        <div *ngIf="form.get('valorContrato')?.errors?.['required']">
-                            o Valor do contrato é obrigatório.
-                        </div>
-                    </div>
+            
                     <div class="col-md-4">
                         <label class="form-label">Data Início *</label>
                         <input type="date" class="form-control" formControlName="dataInicio">
