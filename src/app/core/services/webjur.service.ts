@@ -86,16 +86,11 @@ sincronizarPublicacao(id:string){
     {}
   );
 }
-
-adicionarComentario(id:string, comentario:string){
-
+adicionarComentario(id: string, comentario: string) {
   return this.http.post(
     `${this.url}/api/v1/webjur/publicacoes/${id}/comentarios`,
-    {
-      comentario
-    }
+    { comentario }
   );
-
 }
 
 baixarPdf(id:string){
@@ -106,5 +101,22 @@ baixarPdf(id:string){
         responseType:'blob'
       });
 
+}
+getComentarios(id: string) {
+  return this.http.get<any>(
+    `${this.url}/api/v1/webjur/publicacoes/${id}/comentarios`
+  );
+}
+
+getVisualizacoes(id: string, pageNumber: number, pageSize: number) {
+  return this.http.get<any>(
+    `${this.url}/api/v1/webjur/publicacoes/${id}/visualizacoes`,
+    {
+      params: {
+        pageNumber,
+        pageSize
+      }
+    }
+  );
 }
 }

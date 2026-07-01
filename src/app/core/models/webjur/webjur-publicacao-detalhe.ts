@@ -14,7 +14,53 @@ export interface WebJurPublicacaoDetalhe {
 
   dataPublicacao: Date;
 
+  dataCadastroWebJur: Date;
+
+  dataDivulgacao?: Date;
+
   textoPublicacao: string;
+
+  publicacaoCorrigida: boolean;
+
+  importada: boolean;
+
+  processoId?: string;
+
+  // =========================
+  // Dados adicionais do WebJur
+  // =========================
+
+  anoPublicacao: number;
+
+  edicaoDiario: number;
+
+  descricaoDiario?: string;
+
+  paginaInicial: number;
+
+  paginaFinal: number;
+
+  ufPublicacao?: string;
+
+  cidadePublicacao?: string;
+
+  codVinculo: number;
+
+  nomeVinculo?: string;
+
+  oabNumero: number;
+
+  oabEstado?: string;
+
+  codIntegracao?: string;
+
+  publicacaoExportada: boolean;
+
+  codGrupo: number;
+
+  // =========================
+  // Relacionamentos
+  // =========================
 
   processoInterno: ProcessoInterno | null;
 

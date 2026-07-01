@@ -1,0 +1,265 @@
+<div class="container-fluid p-0">
+
+  <!-- CABEÇALHO -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+      <h1 class="h3 mb-1">
+        <i class="fas fa-gavel text-primary me-2"></i>
+        Detalhe do Processo
+      </h1>
+
+      <p class="text-muted mb-0">
+        Visualização completa do processo
+      </p>
+    </div>
+
+  
+
+  </div>
+
+  <!-- CARD PRINCIPAL -->
+  <div class="card shadow-sm border-0">
+
+    <div class="card-body">
+
+      <!-- ================= DADOS PRINCIPAIS ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-folder-open text-primary me-2"></i>
+        Dados do Processo
+      </h5>
+
+      <div class="row">
+
+        <!-- Número do Processo (LINK) -->
+        <div class="col-md-6 mb-3">
+
+          <small class="text-muted">
+            <i class="fas fa-hashtag me-1 text-primary"></i>
+            Número do Processo
+          </small>
+
+          <div class="fw-bold">
+
+            <a
+              [routerLink]="['/admin/editar-processo', processo.id]"
+              class="text-decoration-none"
+              title="Abrir processo">
+
+              <i class="fas fa-external-link-alt me-1 text-primary"></i>
+
+              {{ processo.numeroProcesso }}
+
+            </a>
+
+          </div>
+
+        </div>
+
+        <!-- Pasta -->
+        <div class="col-md-6 mb-3">
+
+          <small class="text-muted">
+            <i class="fas fa-folder me-1 text-warning"></i>
+            Pasta
+          </small>
+
+          <div>
+            {{ processo.pasta || '-' }}
+          </div>
+
+        </div>
+
+        <!-- Título -->
+        <div class="col-md-12 mb-3">
+
+          <small class="text-muted">
+            <i class="fas fa-heading me-1 text-success"></i>
+            Título
+          </small>
+
+          <div class="fw-bold">
+            {{ processo.titulo || '-' }}
+          </div>
+
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= PARTES ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-users text-primary me-2"></i>
+        Partes
+      </h5>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <small class="text-muted">
+            <i class="fas fa-user me-1"></i>
+            Clientes
+          </small>
+
+          <div>
+            {{ processo.clientes?.length ? processo.clientes.join(', ') : '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <small class="text-muted">
+            <i class="fas fa-user-friends me-1"></i>
+            Envolvidos
+          </small>
+
+          <div>
+            {{ processo.envolvidos?.length ? processo.envolvidos.join(', ') : '-' }}
+          </div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= DADOS PROCESSUAIS ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-balance-scale text-primary me-2"></i>
+        Dados Processuais
+      </h5>
+
+      <div class="row">
+
+        <div class="col-md-3 mb-3">
+          <small class="text-muted">
+            Instância
+          </small>
+          <div>{{ processo.instancia || '-' }}</div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <small class="text-muted">
+            Acesso
+          </small>
+          <div>{{ processo.acesso || '-' }}</div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <small class="text-muted">
+            Ação
+          </small>
+          <div>{{ processo.acaoNome || '-' }}</div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <small class="text-muted">
+            Responsável
+          </small>
+          <div>{{ processo.usuarioResponsavelNome || '-' }}</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= LOCAL ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-landmark text-primary me-2"></i>
+        Local
+      </h5>
+
+      <div class="row">
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Foro</small>
+          <div>{{ processo.foroNome || '-' }}</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Vara</small>
+          <div>{{ processo.varaNome || '-' }}</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Juízo</small>
+          <div>{{ processo.juizo || '-' }}</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= VALORES ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-coins text-primary me-2"></i>
+        Valores
+      </h5>
+
+      <div class="row">
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Valor da Causa</small>
+          <div>{{ processo.valorCausa || '-' }}</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Valor da Condenação</small>
+          <div>{{ processo.valorCondenacao || '-' }}</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <small class="text-muted">Data de Distribuição</small>
+          <div>{{ processo.distribuido | date:'dd/MM/yyyy' }}</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= COMPLEMENTOS ================= -->
+      <h5 class="mb-3">
+        <i class="fas fa-file-alt text-primary me-2"></i>
+        Complementos
+      </h5>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <small class="text-muted">Objeto</small>
+          <div>{{ processo.objeto || '-' }}</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <small class="text-muted">Observação</small>
+          <div>{{ processo.observacao || '-' }}</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- ================= LINK TRIBUNAL ================= -->
+      <div class="mb-3">
+
+        <small class="text-muted">
+          <i class="fas fa-link me-1 text-info"></i>
+          Link do Tribunal
+        </small>
+
+        <div>
+          <a *ngIf="processo.linkTribunal"
+             [href]="processo.linkTribunal"
+             target="_blank"
+             class="text-decoration-none">
+
+            Abrir no tribunal
+          </a>
+
+          <span *ngIf="!processo.linkTribunal">-</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

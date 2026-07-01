@@ -18,59 +18,43 @@
 
     <div class="d-flex gap-2">
 
-      <button
-        class="btn btn-outline-secondary"
-        (click)="voltar()">
+      <button class="btn btn-outline-secondary" (click)="voltar()">
 
         <i class="fas fa-arrow-left me-2"></i>
         Voltar
 
       </button>
 
-      <button
-        class="btn btn-success"
-        (click)="baixarPdf()">
-
-        <i class="fas fa-file-pdf me-2"></i>
-        PDF
-
-      </button>
-
-      <button
-        class="btn btn-primary"
-        (click)="sincronizar()">
-
-        <i class="fas fa-sync-alt me-2"></i>
-        Sincronizar
-
-      </button>
+   
 
     </div>
 
   </div>
-<div class="row mb-4">
+  <div class="row mb-4">
 
-  <div class="col-xl-3 col-md-6 mb-3">
+    <!-- VISUALIZAÇÕES -->
+    <div class="col-xl-3 col-md-6 mb-3">
 
-    <div class="card border-0 shadow-sm indicador-card bg-primary text-white">
+      <div class="card border-0 shadow-sm indicador-card bg-primary text-white" style="cursor: pointer;"
+        (click)="abrirModalVisualizacoes()">
 
-      <div class="card-body">
+        <div class="card-body">
 
-        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
 
-          <div>
+            <div>
 
-            <small>Visualizações</small>
+              <small>Visualizações</small>
 
-            <h2 class="mb-0">
+              <h2 class="mb-0">
+                {{ totalVisualizacoes || 0 }}
+              </h2>
 
-              {{ detalhe.visualizacoes.length }}
+            </div>
 
-            </h2>
+            <i class="fas fa-eye fa-2x opacity-75"></i>
 
           </div>
-
-          <i class="fas fa-eye fa-2x opacity-75"></i>
 
         </div>
 
@@ -78,29 +62,29 @@
 
     </div>
 
-  </div>
+    <!-- COMENTÁRIOS -->
+    <div class="col-xl-3 col-md-6 mb-3">
 
-  <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card border-0 shadow-sm indicador-card bg-success text-white" style="cursor: pointer;"
+        (click)="abrirComentarios()">
 
-    <div class="card border-0 shadow-sm indicador-card bg-success text-white">
+        <div class="card-body">
 
-      <div class="card-body">
+          <div class="d-flex justify-content-between">
 
-        <div class="d-flex justify-content-between">
+            <div>
 
-          <div>
+              <small>Comentários</small>
 
-            <small>Comentários</small>
+              <h2>
+                {{ detalhe?.comentarios?.length || 0 }}
+              </h2>
 
-            <h2>
+            </div>
 
-              {{ detalhe.comentarios.length }}
-
-            </h2>
+            <i class="fas fa-comments fa-2x"></i>
 
           </div>
-
-          <i class="fas fa-comments fa-2x"></i>
 
         </div>
 
@@ -108,194 +92,60 @@
 
     </div>
 
-  </div>
-
-  <div class="col-xl-3 col-md-6 mb-3">
-
-    <div class="card border-0 shadow-sm indicador-card bg-warning text-dark">
-
-      <div class="card-body">
-
-        <div class="d-flex justify-content-between">
-
-          <div>
-
-            <small>Arquivos</small>
-
-            <h2>
-
-              {{ detalhe.arquivos.length }}
-
-            </h2>
-
-          </div>
-
-          <i class="fas fa-paperclip fa-2x"></i>
-
-        </div>
-
-      </div>
-
-    </div>
+    <!-- ARQUIVOS -->
+   
 
   </div>
 
-  <div class="col-xl-3 col-md-6 mb-3">
-
-    <div class="card border-0 shadow-sm indicador-card bg-danger text-white">
-
-      <div class="card-body">
-
-        <div class="d-flex justify-content-between">
-
-          <div>
-
-            <small>Sincronizações</small>
-
-            <h2>
-
-              {{ detalhe.sincronizacoes.length }}
-
-            </h2>
-
-          </div>
-
-          <i class="fas fa-sync-alt fa-2x"></i>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-<div class="card shadow-sm border-0 mb-4">
-
-    <div class="card-header ">
-
-        <i class="fas fa-bolt me-2 text-warning"></i>
-
-        Ações Rápidas
-
-    </div>
-
-    <div class="card-body">
-
-        <div class="row">
-
-            <div class="col-lg-3 mb-2">
-
-                <button
-                    class="btn btn-outline-primary w-100">
-
-                    <i class="fas fa-folder-open me-2"></i>
-
-                    Abrir Processo
-
-                </button>
-
-            </div>
-
-            <div class="col-lg-3 mb-2">
-
-                <button
-                    class="btn btn-outline-success w-100"
-                    (click)="baixarPdf()">
-
-                    <i class="fas fa-file-pdf me-2"></i>
-
-                    Download PDF
-
-                </button>
-
-            </div>
-
-            <div class="col-lg-3 mb-2">
-
-                <button
-                    class="btn btn-outline-info w-100"
-                    (click)="sincronizar()">
-
-                    <i class="fas fa-sync me-2"></i>
-
-                    Sincronizar
-
-                </button>
-
-            </div>
-
-            <div class="col-lg-3 mb-2">
-
-                <button
-                    class="btn btn-outline-secondary w-100">
-
-                    <i class="fas fa-copy me-2"></i>
-
-                    Copiar Processo
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<div
-    class="alert alert-warning shadow-sm"
-    *ngIf="detalhe.processoInterno">
+  <div class="alert alert-warning shadow-sm" *ngIf="detalhe?.processoInterno">
 
     <div class="d-flex align-items-center">
 
-        <i class="fas fa-calendar-alt fa-2x me-3"></i>
+      <i class="fas fa-calendar-alt fa-2x me-3"></i>
 
-        <div>
+      <div>
 
-            <strong>
+        <strong>
 
-                Próxima audiência
+          Próxima audiência
 
-            </strong>
+        </strong>
 
-            <br>
+        <br>
 
-            {{ detalhe.processoInterno.proximaAudiencia | date:'dd/MM/yyyy HH:mm' }}
+        {{ detalhe?.processoInterno?.proximaAudiencia | date:'dd/MM/yyyy' }}
 
-        </div>
+      </div>
 
     </div>
 
-</div>
-<div class="card shadow-sm border-0 mb-4">
+  </div>
+  <div class="card shadow-sm border-0 mb-4">
 
     <div class="card-header bg-dark text-white">
 
-        <i class="fas fa-robot me-2"></i>
+      <i class="fas fa-robot me-2"></i>
 
-        Resumo Inteligente
+      Resumo Inteligente
 
     </div>
 
     <div class="card-body">
 
-        <div class="alert alert-info mb-0">
+      <div class="alert alert-info mb-0">
 
-            <i class="fas fa-brain me-2"></i>
+        <i class="fas fa-brain me-2"></i>
 
-            Em breve este painel exibirá um resumo automático da publicação, destacando partes envolvidas, prazos, movimentações relevantes e sugestões de ações.
+        Em breve este painel exibirá um resumo automático da publicação, destacando partes envolvidas, prazos,
+        movimentações relevantes e sugestões de ações.
 
-        </div>
+      </div>
 
     </div>
 
-</div>
+  </div>
   <!-- Loading -->
-  <div
-    *ngIf="carregando"
-    class="text-center py-5">
+  <div *ngIf="carregando" class="text-center py-5">
 
     <div class="spinner-border text-primary"></div>
 
@@ -406,7 +256,16 @@
           </div>
 
         </div>
+        
+     <button
+    class="btn btn-outline-primary shadow-sm px-4"
+    (click)="abrirModalDadosWebJur()">
 
+    <i class="fas fa-file-contract me-2"></i>
+
+   ver mais informações
+
+</button>
       </div>
 
     </div>
@@ -425,25 +284,20 @@
 
       <div class="card-body">
 
-        <div
-          class="publicacao-texto"
-          [innerHTML]="detalhe.textoPublicacao">
+        <div class="publicacao-texto" [innerHTML]="detalhe.textoPublicacao">
 
         </div>
 
       </div>
 
     </div>
-        <!-- Processo Interno + Estatísticas -->
 
-  
-        <!-- Processo Interno + Estatísticas -->
 
     <div class="row">
 
       <!-- Processo -->
 
-      <div class="col-lg-8 mb-4">
+      <div class="col-lg-6 mb-4">
 
         <div class="card shadow-sm border-0 h-100">
 
@@ -457,119 +311,86 @@
 
           <div class="card-body">
 
-            <ng-container *ngIf="detalhe.processoInterno; else processoNaoEncontrado">
+           <ng-container *ngIf="processo; else processoNaoEncontrado">
 
-              <div class="row">
+<div class="row">
 
-                <div class="col-md-6 mb-3">
+  <!-- Número do Processo -->
+  <div class="col-md-6 mb-3">
 
-                  <small class="text-muted">
+    <small class="text-muted">
+      <i class="fas fa-hashtag me-1 text-primary"></i>
+      Número do Processo
+    </small>
 
-                    Número Interno
+    <div class="fw-bold">
 
-                  </small>
+      <a
+        [routerLink]="['/admin/detalhe-processo', processo.id]"
+        class="text-decoration-none"
+        title="Abrir processo">
 
-                  <div class="fw-bold">
+        <i class="fas fa-external-link-alt me-1 text-primary"></i>
 
-                    {{ detalhe.processoInterno.numeroInterno }}
+        {{ processo.numeroProcesso }}
 
-                  </div>
+      </a>
 
-                </div>
+    </div>
 
-                <div class="col-md-6 mb-3">
+  </div>
 
-                  <small class="text-muted">
+  <!-- Pasta -->
+  <div class="col-md-6 mb-3">
 
-                    Status
+    <small class="text-muted">
+      <i class="fas fa-folder me-1 text-warning"></i>
+      Pasta
+    </small>
 
-                  </small>
+    <div>
+      {{ processo.pasta || '-' }}
+    </div>
 
-                  <div>
+  </div>
 
-                    <span class="badge bg-success">
+  <!-- Título -->
+  <div class="col-md-12 mb-3">
 
-                      {{ detalhe.processoInterno.status }}
+    <small class="text-muted">
+      <i class="fas fa-heading me-1 text-success"></i>
+      Título
+    </small>
 
-                    </span>
+    <div class="fw-bold">
+      {{ processo.titulo }}
+    </div>
 
-                  </div>
+  </div>
 
-                </div>
+</div>
 
-                <div class="col-md-6 mb-3">
+</ng-container>
 
-                  <small class="text-muted">
+<ng-template #processoNaoEncontrado>
 
-                    Cliente
+  <div class="text-center py-4">
 
-                  </small>
+    <i class="fas fa-unlink fa-3x text-secondary mb-3"></i>
 
-                  <div>
+    <h5>
+      Nenhum processo vinculado
+    </h5>
 
-                    {{ detalhe.processoInterno.cliente }}
+    <p class="text-muted">
+      Esta publicação ainda não está vinculada a um processo interno.
+    </p>
 
-                  </div>
+  </div>
 
-                </div>
+</ng-template>
 
-                <div class="col-md-6 mb-3">
-
-                  <small class="text-muted">
-
-                    Advogado
-
-                  </small>
-
-                  <div>
-
-                    {{ detalhe.processoInterno.advogadoResponsavel }}
-
-                  </div>
-
-                </div>
-
-                <div class="col-md-12">
-
-                  <small class="text-muted">
-
-                    Próxima Audiência
-
-                  </small>
-
-                  <div>
-
-                    {{ detalhe.processoInterno.proximaAudiencia | date:'dd/MM/yyyy HH:mm' }}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </ng-container>
-
-            <ng-template #processoNaoEncontrado>
-
-              <div class="text-center py-4">
-
-                <i class="fas fa-unlink fa-3x text-secondary mb-3"></i>
-
-                <h5>
-
-                  Nenhum processo interno vinculado
-
-                </h5>
-
-                <p class="text-muted">
-
-                  Esta publicação ainda não está vinculada a um processo.
-
-                </p>
-
-              </div>
-
-            </ng-template>
+ 
 
           </div>
 
@@ -579,109 +400,124 @@
 
       <!-- Estatísticas -->
 
-      <div class="col-lg-4 mb-4">
 
-        <div class="card shadow-sm border-0">
 
-          <div class="card-header bg-secondary text-white">
+      <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 mb-4">
 
-            <i class="fas fa-chart-pie me-2"></i>
+          <div class="card-header bg-success text-white d-flex justify-content-between">
 
-            Estatísticas
+            <span>
+
+              <i class="fas fa-comments me-2"></i>
+
+              Comentários Internos
+
+            </span>
+
+            <span class="badge bg-light text-dark">
+
+              {{ detalhe.comentarios.length }}
+
+            </span>
 
           </div>
 
-          <div class="list-group list-group-flush">
+          <div class="card-body">
 
-            <div class="list-group-item d-flex justify-content-between">
+            <div class="mb-4">
 
-              <span>
+              <textarea class="form-control" rows="4" [(ngModel)]="comentario" placeholder="Digite um comentário...">
 
-                <i class="fas fa-comments text-primary me-2"></i>
+            </textarea>
 
-                Comentários
+              <div class="text-end mt-3">
 
-              </span>
+                <button class="btn btn-success" (click)="adicionarComentario()">
 
-              <strong>
+                  <i class="fas fa-paper-plane me-2"></i>
 
-                {{ detalhe.comentarios.length }}
+                  Adicionar Comentário
 
-              </strong>
+                </button>
 
-            </div>
+              </div>
 
-            <div class="list-group-item d-flex justify-content-between">
+            </div>        
 
-              <span>
 
-                <i class="fas fa-history text-success me-2"></i>
+          </div>
 
-                Movimentações
+        </div>
+      </div>
 
-              </span>
 
-              <strong>
 
-                {{ detalhe.movimentacoes.length }}
+      <!-- Processo -->
 
-              </strong>
+    
+     
+    </div>
+    <div class="modal fade show d-block" *ngIf="mostrarModalComentarios" style="background: rgba(0,0,0,.5);">
 
-            </div>
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
 
-            <div class="list-group-item d-flex justify-content-between">
+        <div class="modal-content">
 
-              <span>
+          <div class="modal-header">
 
-                <i class="fas fa-paperclip text-warning me-2"></i>
+            <h5 class="modal-title">
 
-                Arquivos
+              Comentários
 
-              </span>
+            </h5>
 
-              <strong>
+            <button class="btn-close" (click)="mostrarModalComentarios=false">
+            </button>
 
-                {{ detalhe.arquivos.length }}
+          </div>
 
-              </strong>
+          <div class="modal-body">
 
-            </div>
+            <div *ngIf="detalhe?.comentarios?.length==0">
 
-            <div class="list-group-item d-flex justify-content-between">
-
-              <span>
-
-                <i class="fas fa-eye text-info me-2"></i>
-
-                Visualizações
-
-              </span>
-
-              <strong>
-
-                {{ detalhe.visualizacoes.length }}
-
-              </strong>
+              Nenhum comentário.
 
             </div>
 
-            <div class="list-group-item d-flex justify-content-between">
+            <div *ngFor="let c of detalhe?.comentarios" class="card mb-3 border-start border-success border-4">
 
-              <span>
+              <div class="card-body">
 
-                <i class="fas fa-sync-alt text-danger me-2"></i>
+                <div class="d-flex justify-content-between">
 
-                Sincronizações
+                  <strong>{{ c.usuario }}</strong>
 
-              </span>
+                  <small>
 
-              <strong>
+                    {{ c.dataCadastro | date:'dd/MM/yyyy HH:mm' }}
 
-                {{ detalhe.sincronizacoes.length }}
+                  </small>
 
-              </strong>
+                </div>
+
+                <hr>
+
+                {{ c.comentario }}
+
+              </div>
 
             </div>
+
+          </div>
+
+          <div class="modal-footer">
+
+            <button class="btn btn-secondary" (click)="mostrarModalComentarios=false">
+
+              Fechar
+
+            </button>
 
           </div>
 
@@ -690,324 +526,275 @@
       </div>
 
     </div>
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="modal fade show d-block" *ngIf="mostrarModalVisualizacoes" style="background: rgba(0,0,0,.5);">
 
-    <div class="card-header bg-success text-white d-flex justify-content-between">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
 
-        <span>
+        <div class="modal-content">
 
-            <i class="fas fa-comments me-2"></i>
+          <!-- HEADER -->
+          <div class="modal-header">
 
-            Comentários Internos
-
-        </span>
-
-        <span class="badge bg-light text-dark">
-
-            {{ detalhe.comentarios.length }}
-
-        </span>
-
-    </div>
-
-    <div class="card-body">
-
-        <div class="mb-4">
-
-            <textarea
-                class="form-control"
-                rows="4"
-                [(ngModel)]="comentario"
-                placeholder="Digite um comentário...">
-
-            </textarea>
-
-            <div class="text-end mt-3">
-
-                <button
-                    class="btn btn-success"
-                    (click)="adicionarComentario()">
-
-                    <i class="fas fa-paper-plane me-2"></i>
-
-                    Adicionar Comentário
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <hr>
-
-        <div *ngIf="detalhe.comentarios.length==0">
-
-            <div class="text-center py-4">
-
-                <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
-
-                <h5>
-
-                    Nenhum comentário
-
-                </h5>
-
-            </div>
-
-        </div>
-
-        <div
-            *ngFor="let c of detalhe.comentarios"
-            class="card mb-3 border-start border-success border-4">
-
-            <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
-                    <strong>
-
-                        <i class="fas fa-user-circle me-2"></i>
-
-                        {{ c.usuario }}
-
-                    </strong>
-
-                    <small>
-
-                        {{ c.dataCadastro | date:'dd/MM/yyyy HH:mm' }}
-
-                    </small>
-
-                </div>
-
-                <hr>
-
-                {{ c.comentario }}
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<div class="card shadow-sm border-0 mb-4">
-
-    <div class="card-header bg-warning">
-
-        <i class="fas fa-paperclip me-2"></i>
-
-        Arquivos da Publicação
-
-    </div>
-
-    <div class="card-body">
-
-        <div *ngIf="detalhe.arquivos.length==0" class="text-center py-4">
-
-            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-
-            <h5>Nenhum arquivo encontrado</h5>
-
-        </div>
-
-        <div
-            *ngFor="let arquivo of detalhe.arquivos"
-            class="card mb-2">
-
-            <div class="card-body d-flex justify-content-between align-items-center">
-
-                <div>
-
-                    <i class="fas fa-file-pdf text-danger me-2"></i>
-
-                    <strong>
-
-                        {{ arquivo.nomeArquivo }}
-
-                    </strong>
-
-                    <br>
-
-                    <small class="text-muted">
-
-                        {{ arquivo.tipoArquivo }}
-
-                    </small>
-
-                </div>
-
-                <button class="btn btn-outline-primary">
-
-                    <i class="fas fa-download me-2"></i>
-
-                    Download
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div><div class="card shadow-sm border-0 mb-4">
-
-    <div class="card-header bg-info text-white">
-
-        <i class="fas fa-eye me-2"></i>
-
-        Histórico de Visualizações
-
-    </div>
-
-    <div class="card-body">
-
-        <div *ngIf="detalhe.visualizacoes.length==0" class="text-center py-4">
-
-            <i class="fas fa-user-clock fa-3x text-muted mb-3"></i>
-
-            <h5>
-
-                Ainda não visualizada
-
+            <h5 class="modal-title">
+              Histórico de Visualizações
             </h5>
 
+            <button type="button" class="btn-close" (click)="fecharVisualizacoes()">
+            </button>
+
+          </div>
+
+          <!-- BODY -->
+          <div class="modal-body">
+
+            <!-- LOADING -->
+            <app-spinner-consulta *ngIf="carregandoVisualizacoes" [carregando]="true"
+              message="Carregando visualizações...">
+            </app-spinner-consulta>
+
+            <!-- VAZIO -->
+            <div *ngIf="!carregandoVisualizacoes && visualizacoes.length === 0" class="text-center py-4">
+
+              <i class="fas fa-user-clock fa-3x text-muted mb-3"></i>
+
+              <h5>Nenhuma visualização registrada</h5>
+
+            </div>
+
+            <!-- TABELA -->
+            <table *ngIf="!carregandoVisualizacoes && visualizacoes.length > 0" class="table table-striped w-100">
+
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor="let v of visualizacoes">
+
+                  <td>
+                    <i class="fas fa-user me-2"></i>
+                    {{ v.usuario }}
+                  </td>
+
+                  <td>
+                    {{ v.dataVisualizacao | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+
+            <!-- PAGINAÇÃO SIMPLES -->
+            <div class="d-flex justify-content-between align-items-center mt-3"
+              *ngIf="totalVisualizacoes > pageSizeVisualizacao">
+
+              <button class="btn btn-outline-secondary" [disabled]="paginaVisualizacao === 1"
+                (click)="carregarVisualizacoes(paginaVisualizacao - 1)">
+
+                Anterior
+
+              </button>
+
+              <span>
+                Página {{ paginaVisualizacao }}
+              </span>
+
+              <button class="btn btn-outline-secondary"
+                [disabled]="paginaVisualizacao * pageSizeVisualizacao >= totalVisualizacoes"
+                (click)="carregarVisualizacoes(paginaVisualizacao + 1)">
+
+                Próxima
+
+              </button>
+
+            </div>
+
+            <!-- INFO -->
+            <p class="text-end text-muted mt-2">
+              Total: {{ totalVisualizacoes }}
+            </p>
+
+          </div>
+
+          <!-- FOOTER -->
+          <div class="modal-footer">
+
+            <button class="btn btn-secondary" (click)="fecharVisualizacoes()">
+
+              Fechar
+
+            </button>
+
+          </div>
+
         </div>
 
-        <table
-            *ngIf="detalhe.visualizacoes.length>0"
-            class="table table-hover">
-
-            <thead>
-
-                <tr>
-
-                    <th>Usuário</th>
-
-                    <th>Data</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <tr *ngFor="let v of detalhe.visualizacoes">
-
-                    <td>
-
-                        <i class="fas fa-user me-2"></i>
-
-                        {{ v.usuario }}
-
-                    </td>
-
-                    <td>
-
-                        {{ v.dataVisualizacao | date:'dd/MM/yyyy HH:mm' }}
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
+      </div>
     </div>
+    <div class="modal fade show d-block" *ngIf="mostrarModalDadosWebJur" style="background: rgba(0,0,0,.5);">
 
-</div><div class="card shadow-sm border-0 mb-5">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
 
-    <div class="card-header bg-dark text-white">
+        <div class="modal-content">
 
-        <i class="fas fa-sync-alt me-2"></i>
+          <div class="modal-header bg-info text-white">
 
-        Histórico de Sincronizações
-
-    </div>
-
-    <div class="card-body">
-
-        <div
-            *ngIf="detalhe.sincronizacoes.length==0"
-            class="text-center py-4">
-
-            <i class="fas fa-cloud fa-3x text-muted mb-3"></i>
-
-            <h5>
-
-                Nenhuma sincronização registrada
-
+            <h5 class="modal-title">
+              Informações completas da publicação
             </h5>
 
+            <button type="button" class="btn-close btn-close-white" (click)="fecharModalDadosWebJur()">
+            </button>
+
+          </div>
+
+          <div class="modal-body">
+
+<div class="row">
+
+  <!-- COLUNA ESQUERDA -->
+  <div class="col-md-6">
+
+    <table class="table table-hover table-bordered align-middle">
+
+      <tbody>
+
+        <tr>
+          <th width="45%">
+            <i class="fas fa-calendar-alt text-primary me-2"></i>
+            Ano da Publicação
+          </th>
+          <td>{{ detalhe?.anoPublicacao }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-book-open text-success me-2"></i>
+            Edição do Diário
+          </th>
+          <td>{{ detalhe?.edicaoDiario }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-newspaper text-info me-2"></i>
+            Diário Oficial
+          </th>
+          <td>{{ detalhe?.descricaoDiario }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-file-alt text-warning me-2"></i>
+            Página Inicial
+          </th>
+          <td>{{ detalhe?.paginaInicial }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-file-alt text-warning me-2"></i>
+            Página Final
+          </th>
+          <td>{{ detalhe?.paginaFinal }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-calendar-check text-danger me-2"></i>
+            Data de Divulgação
+          </th>
+          <td>{{ detalhe?.dataDivulgacao | date:'dd/MM/yyyy' }}</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- COLUNA DIREITA -->
+  <div class="col-md-6">
+
+    <table class="table table-hover table-bordered align-middle">
+
+      <tbody>
+
+        <tr>
+          <th width="45%">
+            <i class="fas fa-city text-primary me-2"></i>
+            Cidade
+          </th>
+          <td>{{ detalhe?.cidadePublicacao || '-' }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+            UF
+          </th>
+          <td>{{ detalhe?.ufPublicacao }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-user-tie text-success me-2"></i>
+            OAB
+          </th>
+          <td>{{ detalhe?.oabNumero }}/{{ detalhe?.oabEstado }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-balance-scale text-warning me-2"></i>
+            Vínculo
+          </th>
+          <td>{{ detalhe?.nomeVinculo }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-link text-info me-2"></i>
+            Código de Integração
+          </th>
+          <td>{{ detalhe?.codIntegracao }}</td>
+        </tr>
+
+        <tr>
+          <th>
+            <i class="fas fa-layer-group text-secondary me-2"></i>
+            Grupo
+          </th>
+          <td>{{ detalhe?.codGrupo }}</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+          </div>
+
+          <div class="modal-footer">
+
+            <button class="btn btn-secondary" (click)="fecharModalDadosWebJur()">
+              Fechar
+            </button>
+
+          </div>
+
         </div>
 
-        <table
-            *ngIf="detalhe.sincronizacoes.length>0"
-            class="table table-striped">
-
-            <thead>
-
-                <tr>
-
-                    <th>Início</th>
-
-                    <th>Fim</th>
-
-                    <th>Status</th>
-
-                    <th>Mensagem</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <tr
-                    *ngFor="let s of detalhe.sincronizacoes">
-
-                    <td>
-
-                        {{ s.inicio | date:'dd/MM/yyyy HH:mm' }}
-
-                    </td>
-
-                    <td>
-
-                        {{ s.fim | date:'dd/MM/yyyy HH:mm' }}
-
-                    </td>
-
-                    <td>
-
-                        <span
-                            class="badge"
-                            [ngClass]="s.sucesso ? 'bg-success' : 'bg-danger'">
-
-                            {{ s.sucesso ? 'Sucesso' : 'Erro' }}
-
-                        </span>
-
-                    </td>
-
-                    <td>
-
-                        {{ s.mensagem }}
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
+      </div>
 
     </div>
-
-</div>
-
-</div>
-
-</div>
+  </div>

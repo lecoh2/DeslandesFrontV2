@@ -49,6 +49,7 @@ import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/con
 import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
 import { Publicacoes } from "./components/webjur/publicacoes";
 import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
+import { DetalheProcesso } from "./components/processo/detalhes/detalhe-processo";
 
 //import { CriarUsuario } from "./components/usuario/criar-usuario/criar-usuario";
 
@@ -98,7 +99,13 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador', 'Administração', 'Coordenador', 'Conciliador', 'Estagiários'] }
 
-            },           
+            }   
+            , {
+                path: 'detalhe-processo/:id',
+                component: DetalheProcesso,
+                canActivate: [AuthGuard, NivelGuard],
+                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
+            },        
             //atendmento
             {
                 path: 'cadastrar-atendimento',

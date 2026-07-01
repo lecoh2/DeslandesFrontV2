@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs';
-import { WebJurPublicacaoDetalhe } from '../../../../../core/models/webjur/webjur-publicacao-detalhe';
 import { WebJurService } from '../../../../../core/services/webjur.service';
-
+import { WebJurPublicacaoDetalhe } from '../../../../../core/models/webjur/webjur-publicacao-detalhe';
+import { finalize } from 'rxjs';
+import { ProcessoResumoResponse } from '../../../../../core/models/processo-resumo/processo-resumo-response';
+import { ProcessoService } from '../../../../../core/services/processo.service';
 
 @Component({
   selector: 'app-detalhe-publicacao',
@@ -13,127 +14,302 @@ import { WebJurService } from '../../../../../core/services/webjur.service';
 })
 export class DetalhePublicacao implements OnInit {
 
+  // ================== INJEÇÕES ==================
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(WebJurService);
+  private processoService = inject(ProcessoService);
+  private cdr = inject(ChangeDetectorRef);
+  private zone = inject(NgZone);
 
+  // ================== ESTADO ==================
   carregando = false;
+  detalhe: WebJurPublicacaoDetalhe | null = null;
 
-  detalhe!: WebJurPublicacaoDetalhe;
 
-  comentario = '';
 
   mensagemErro: string[] = [];
-
   mensagemSucesso: string[] = [];
-  adicionarComentario(): void {
 
-    if (!this.comentario.trim())
-      return;
+  comentario = '';
+mostrarModalDadosWebJur = false;
+  // Modal
+  mostrarModalComentarios = false;
+  mostrarModalVisualizacoes = false;
 
-    console.log(this.comentario);
 
-    this.comentario = '';
+carregandoVisualizacoes = false;
 
+visualizacoes: any[] = [];
+
+paginaVisualizacao = 1;
+pageSizeVisualizacao = 10;
+
+totalVisualizacoes = 0;
+totalVisualizacoesPaginas = 0;
+
+paginasVisualizacaoVisiveis: number[] = [];
+processo: ProcessoResumoResponse | null = null;
+carregandoProcesso = false;
+
+private carregarProcesso() {
+
+  if (!this.detalhe?.processoId) {
+    this.processo = null;
+    return;
   }
-  ngOnInit(): void {
 
-    const id = this.route.snapshot.paramMap.get('id');
+  this.carregandoProcesso = true;
 
-    if (!id)
-      return;
-
-    this.carregar(id);
-
-    this.service.registrarVisualizacao(id)
-      .subscribe();
-
-  }
-
-  carregar(id: string) {
-
-    this.carregando = true;
-
-    this.service
-      .obterDetalhe(id)
+  this.processoService
+      .obterResumoProcesso(this.detalhe.processoId)
       .pipe(
-        finalize(() => this.carregando = false)
+        finalize(() => {
+
+          this.carregandoProcesso = false;
+          this.cdr.detectChanges();
+
+        })
       )
       .subscribe({
 
-        next: response => {
+        next: processo => {
 
-          this.detalhe = response;
+          this.processo = processo;
 
         },
 
-        error: err => {
+        error: () => {
 
-          this.mensagemErro = [
-            err.error?.mensagem ??
-            'Erro ao carregar publicação.'
-          ];
+          this.processo = null;
 
         }
 
       });
 
+}
+
+abrirModalDadosWebJur() {
+  this.mostrarModalDadosWebJur = true;
+}
+
+fecharModalDadosWebJur() {
+  this.mostrarModalDadosWebJur = false;
+}
+carregarVisualizacoes(page = 1) {
+
+  if (!this.detalhe || this.carregandoVisualizacoes) return;
+
+  this.paginaVisualizacao = page;
+  this.carregandoVisualizacoes = true;
+
+  this.service.getVisualizacoes(
+    this.detalhe.id,
+    page,
+    this.pageSizeVisualizacao
+  ).subscribe({
+
+    next: (res) => {
+      this.visualizacoes = res.items ?? [];
+      this.totalVisualizacoes = res.totalCount ?? 0;
+    },
+
+    error: () => {
+      this.visualizacoes = [];
+    },
+
+    complete: () => {
+      this.carregandoVisualizacoes = false;
+      this.cdr.detectChanges();
+    }
+
+  });
+}
+
+abrirModalVisualizacoes() {
+
+  if (!this.detalhe) return;
+
+  this.mostrarModalVisualizacoes = true;
+  this.paginaVisualizacao = 1;
+
+  this.carregarVisualizacoes(1);
+   
+}
+
+  // ================== INIT ==================
+ngOnInit(): void {
+
+  this.route.paramMap.subscribe(params => {
+
+    const id = params.get('id');
+
+    if (!id) return;
+
+    this.zone.run(() => {
+
+      this.carregar(id);
+
+      this.service.registrarVisualizacao(id).subscribe();
+    });
+  });
+}
+
+  // ================== MODAIS ==================
+
+  abrirComentarios() {
+    this.mostrarModalComentarios = true;
   }
 
-  voltar() {
-
-    this.router.navigate(['/webjur']);
-
+  fecharComentarios() {
+    this.mostrarModalComentarios = false;
   }
 
-  sincronizar() {
 
-    this.service
-      .sincronizarPublicacao(this.detalhe.id)
-      .subscribe({
 
-        next: () => {
+fecharVisualizacoes() {
+  this.mostrarModalVisualizacoes = false;
+}
+fecharModal() {
+  this.mostrarModalVisualizacoes = false;
+}
+  // ================== COMENTÁRIO ==================
 
-          this.mensagemSucesso = [
-            'Publicação sincronizada.'
-          ];
+ adicionarComentario() {
 
-          this.carregar(this.detalhe.id);
+  if (!this.detalhe) return;
 
-        }
+  if (!this.comentario.trim()) return;
 
-      });
+  const id = this.detalhe.id;
 
+  this.carregando = true;
+
+  this.service.adicionarComentario(
+    id,
+    this.comentario
+  ).subscribe({
+
+    next: () => {
+
+      this.comentario = '';
+
+      this.carregar(id);
+
+      this.mensagemSucesso = ['Comentário adicionado'];
+
+      this.carregando = false;
+
+    },
+
+    error: (err) => {
+
+      this.mensagemErro = [
+        err.error?.mensagem ?? 'Erro ao adicionar comentário'
+      ];
+
+      this.carregando = false;
+
+    }
+
+  });
+
+}
+gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
+
+  const paginas: number[] = [];
+
+  const inicio = Math.max(1, paginaAtual - 2);
+  const fim = Math.min(totalPaginas, paginaAtual + 2);
+
+  for (let i = inicio; i <= fim; i++) {
+    paginas.push(i);
   }
 
-  comentar() {
+  return paginas;
+}
+  // ================== CARREGAR DETALHE ==================
 
-    if (!this.comentario.trim())
-      return;
+  carregar(id: string) {
 
-    this.service
-      .adicionarComentario(
-        this.detalhe.id,
-        this.comentario
-      )
-      .subscribe({
+    this.zone.run(() => {
 
-        next: () => {
+      this.carregando = true;
+      this.detalhe = null;
+      this.mensagemErro = [];
 
-          this.comentario = '';
+      this.service.obterDetalhe(id)
+        .pipe(
+          finalize(() => {
+            this.carregando = false;
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe({
 
-          this.carregar(this.detalhe.id);
-
-        }
-
-      });
-
+          next: (res) => {
+  console.log(res);
+            this.detalhe = res;
+            if (this.detalhe?.processoId) {
+    this.carregarProcesso();
   }
+ this.carregarVisualizacoes(1);
+            this.cdr.detectChanges();
+          },
+
+          error: (err) => {
+
+            this.mensagemErro = [
+              err.error?.mensagem ?? 'Erro ao carregar publicação.'
+            ];
+
+            this.cdr.detectChanges();
+          }
+
+        });
+    });
+  }
+
+  // ================== SINCRONIZAR ==================
+
+ sincronizar() {
+
+  if (!this.detalhe) return;
+
+  const id = this.detalhe.id;
+
+  this.carregando = true;
+
+  this.service.sincronizarPublicacao(id)
+    .subscribe({
+
+      next: () => {
+
+        this.mensagemSucesso = ['Publicação sincronizada.'];
+
+        this.carregar(id);
+
+      },
+
+      error: () => {
+
+        this.mensagemErro = ['Erro ao sincronizar'];
+
+        this.carregando = false;
+
+      }
+
+    });
+
+}
+
+  // ================== PDF ==================
 
   baixarPdf() {
 
-    this.service
-      .baixarPdf(this.detalhe.id)
+    if (!this.detalhe) return;
+
+    this.service.baixarPdf(this.detalhe.id)
       .subscribe(blob => {
 
         const url = window.URL.createObjectURL(blob);
@@ -141,7 +317,54 @@ export class DetalhePublicacao implements OnInit {
         window.open(url);
 
       });
-
   }
 
+  // ================== VOLTAR ==================
+
+  voltar() {
+    this.router.navigate(['/webjur']);
+  }
+getSituacao(status: number): string {
+
+  switch (status) {
+
+    case 1:
+      return 'Ativo';
+
+    case 2:
+      return 'Suspenso';
+
+    case 3:
+      return 'Arquivado';
+
+    case 4:
+      return 'Encerrado';
+
+    default:
+      return '-';
+  }
+
+}
+
+getSituacaoClass(status: number): string {
+
+  switch (status) {
+
+    case 1:
+      return 'bg-success';
+
+    case 2:
+      return 'bg-warning text-dark';
+
+    case 3:
+      return 'bg-secondary';
+
+    case 4:
+      return 'bg-dark';
+
+    default:
+      return 'bg-light text-dark';
+  }
+
+}
 }

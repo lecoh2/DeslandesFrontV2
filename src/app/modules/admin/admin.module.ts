@@ -61,6 +61,7 @@ import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/con
 import { Publicacoes } from "./components/webjur/publicacoes";
 import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
 import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
+import { DetalheProcesso } from "./components/processo/detalhes/detalhe-processo";
 
 
 
@@ -81,6 +82,7 @@ import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicac
         CadastrarProcesso,
         ConsultarProcesso,
         EditarProcesso,
+        DetalheProcesso,
         CadastrarAtendimento,
         ConsultarAtendimento,
         EditarAtendimento,

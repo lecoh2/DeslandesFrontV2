@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { ApiResponse } from "../models/respostas/api-response";
 import { ProcessoAutoComplete } from "../models/processo/processo-auto-complete";
 import { ObterProcessoResponse } from "../models/processo/obter-processo-response";
+import { ProcessoResumoResponse } from "../models/processo-resumo/processo-resumo-response";
 
 
 @Injectable({
@@ -74,4 +75,35 @@ export class ProcessoService {
       file
     );
   }
+  sincronizarProcesso(id: string): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    return this.http.post(
+      `${this.url}/api/v1/processo/sincronizar-processo/${id}`,
+      {},
+      {
+        headers: token
+          ? { Authorization: `Bearer ${token}` }
+          : {}
+      }
+    );
+  }
+  copiarProcesso(id: string): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    return this.http.post(
+      `${this.url}/api/v1/processo/copiar-processo/${id}`,
+      {},
+      {
+        headers: token
+          ? { Authorization: `Bearer ${token}` }
+          : {}
+      }
+    );
+  }
+  obterResumoProcesso(id: string): Observable<ProcessoResumoResponse> {
+  return this.http.get<ProcessoResumoResponse>(
+    `${this.url}/api/v1/processo/obter-resumo-processo/${id}`
+  );
+}
 }
