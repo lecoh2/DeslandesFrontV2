@@ -47,7 +47,6 @@ import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visual
 import { DashboardFinanceiro } from "./components/dashboard-financeiro/dashboard-financeiro";
 import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/configuracao-financeira";
 import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
-import { Publicacoes } from "./components/webjur/publicacoes";
 import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
 import { DetalheProcesso } from "./components/processo/detalhes/detalhe-processo";
 
@@ -324,13 +323,8 @@ export const routes: Routes = [
             },
             //webJur
 
-             {
-                path: 'publicacoes',
-                component: Publicacoes,
-                canActivate: [AuthGuard, NivelGuard],
-                data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
-            }
-            , {
+            
+            {
                 path: 'consultar-webjur',
                 component: ConsultarWebjur,
                 canActivate: [AuthGuard, NivelGuard],
@@ -341,6 +335,7 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, NivelGuard],
                 data: { niveis: ['Super Administrador', 'Administrador'] } // quem pode acessar
             },
+            
             { path: '', redirectTo: 'painel-principal', pathMatch: 'full' }
         ]
     }

@@ -58,10 +58,10 @@ import { ConsultarContaPagar } from "./components/conta-pagar/consultar/consulta
 import { VisualizarContaPagar } from "./components/conta-pagar/visualizar/visualizar-conta-pagar";
 import { DashboardFinanceiro } from "./components/dashboard-financeiro/dashboard-financeiro";
 import { ConfiguracaoFinanceira } from "./components/configuracao-financeira/configuracao-financeira";
-import { Publicacoes } from "./components/webjur/publicacoes";
-import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
+
 import { DetalhePublicacao } from "./components/webjur/detalhes/detalhe-publicacao";
 import { DetalheProcesso } from "./components/processo/detalhes/detalhe-processo";
+import { ConsultarWebjur } from "./components/webjur/consulta/consultar-webjur";
 
 
 
@@ -115,7 +115,6 @@ import { DetalheProcesso } from "./components/processo/detalhes/detalhe-processo
         VisualizarContaPagar,
         DashboardFinanceiro,
         ConfiguracaoFinanceira,
-        Publicacoes,
         ConsultarWebjur,
         DetalhePublicacao,
       

@@ -26,42 +26,68 @@ export class DetalhePublicacao implements OnInit {
   carregando = false;
   detalhe: WebJurPublicacaoDetalhe | null = null;
 
-
+  andamentosProcesso: any[] = [];
+  carregandoAndamentosProcesso = false;
 
   mensagemErro: string[] = [];
   mensagemSucesso: string[] = [];
 
   comentario = '';
-mostrarModalDadosWebJur = false;
+  mostrarModalDadosWebJur = false;
   // Modal
   mostrarModalComentarios = false;
   mostrarModalVisualizacoes = false;
 
 
-carregandoVisualizacoes = false;
+  carregandoVisualizacoes = false;
 
-visualizacoes: any[] = [];
+  visualizacoes: any[] = [];
 
-paginaVisualizacao = 1;
-pageSizeVisualizacao = 10;
+  paginaVisualizacao = 1;
+  pageSizeVisualizacao = 10;
 
-totalVisualizacoes = 0;
-totalVisualizacoesPaginas = 0;
+  totalVisualizacoes = 0;
+  totalVisualizacoesPaginas = 0;
 
-paginasVisualizacaoVisiveis: number[] = [];
-processo: ProcessoResumoResponse | null = null;
-carregandoProcesso = false;
+  paginasVisualizacaoVisiveis: number[] = [];
+  processo: ProcessoResumoResponse | null = null;
+  carregandoProcesso = false;
+  carregarAndamentosProcesso() {
 
-private carregarProcesso() {
+    if (!this.detalhe?.processoId) {
+      this.andamentosProcesso = [];
+      return;
+    }
 
-  if (!this.detalhe?.processoId) {
-    this.processo = null;
-    return;
+    this.carregandoAndamentosProcesso = true;
+
+    this.processoService
+      .obterAndamentosWebJur(this.detalhe.processoId)
+      .pipe(
+        finalize(() => {
+          this.carregandoAndamentosProcesso = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.andamentosProcesso = res ?? [];
+        },
+        error: () => {
+          this.andamentosProcesso = [];
+        }
+      });
   }
+  private carregarProcesso() {
 
-  this.carregandoProcesso = true;
+    if (!this.detalhe?.processoId) {
+      this.processo = null;
+      return;
+    }
 
-  this.processoService
+    this.carregandoProcesso = true;
+
+    this.processoService
       .obterResumoProcesso(this.detalhe.processoId)
       .pipe(
         finalize(() => {
@@ -87,73 +113,73 @@ private carregarProcesso() {
 
       });
 
-}
+  }
 
-abrirModalDadosWebJur() {
-  this.mostrarModalDadosWebJur = true;
-}
+  abrirModalDadosWebJur() {
+    this.mostrarModalDadosWebJur = true;
+  }
 
-fecharModalDadosWebJur() {
-  this.mostrarModalDadosWebJur = false;
-}
-carregarVisualizacoes(page = 1) {
+  fecharModalDadosWebJur() {
+    this.mostrarModalDadosWebJur = false;
+  }
+  carregarVisualizacoes(page = 1) {
 
-  if (!this.detalhe || this.carregandoVisualizacoes) return;
+    if (!this.detalhe || this.carregandoVisualizacoes) return;
 
-  this.paginaVisualizacao = page;
-  this.carregandoVisualizacoes = true;
+    this.paginaVisualizacao = page;
+    this.carregandoVisualizacoes = true;
 
-  this.service.getVisualizacoes(
-    this.detalhe.id,
-    page,
-    this.pageSizeVisualizacao
-  ).subscribe({
+    this.service.getVisualizacoes(
+      this.detalhe.id,
+      page,
+      this.pageSizeVisualizacao
+    ).subscribe({
 
-    next: (res) => {
-      this.visualizacoes = res.items ?? [];
-      this.totalVisualizacoes = res.totalCount ?? 0;
-    },
+      next: (res) => {
+        this.visualizacoes = res.items ?? [];
+        this.totalVisualizacoes = res.totalCount ?? 0;
+      },
 
-    error: () => {
-      this.visualizacoes = [];
-    },
+      error: () => {
+        this.visualizacoes = [];
+      },
 
-    complete: () => {
-      this.carregandoVisualizacoes = false;
-      this.cdr.detectChanges();
-    }
+      complete: () => {
+        this.carregandoVisualizacoes = false;
+        this.cdr.detectChanges();
+      }
 
-  });
-}
+    });
+  }
 
-abrirModalVisualizacoes() {
+  abrirModalVisualizacoes() {
 
-  if (!this.detalhe) return;
+    if (!this.detalhe) return;
 
-  this.mostrarModalVisualizacoes = true;
-  this.paginaVisualizacao = 1;
+    this.mostrarModalVisualizacoes = true;
+    this.paginaVisualizacao = 1;
 
-  this.carregarVisualizacoes(1);
-   
-}
+    this.carregarVisualizacoes(1);
+
+  }
 
   // ================== INIT ==================
-ngOnInit(): void {
+  ngOnInit(): void {
 
-  this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe(params => {
 
-    const id = params.get('id');
+      const id = params.get('id');
 
-    if (!id) return;
+      if (!id) return;
 
-    this.zone.run(() => {
+      this.zone.run(() => {
 
-      this.carregar(id);
+        this.carregar(id);
 
-      this.service.registrarVisualizacao(id).subscribe();
+        this.service.registrarVisualizacao(id).subscribe();
+      });
     });
-  });
-}
+  }
 
   // ================== MODAIS ==================
 
@@ -167,67 +193,67 @@ ngOnInit(): void {
 
 
 
-fecharVisualizacoes() {
-  this.mostrarModalVisualizacoes = false;
-}
-fecharModal() {
-  this.mostrarModalVisualizacoes = false;
-}
+  fecharVisualizacoes() {
+    this.mostrarModalVisualizacoes = false;
+  }
+  fecharModal() {
+    this.mostrarModalVisualizacoes = false;
+  }
   // ================== COMENTÁRIO ==================
 
- adicionarComentario() {
+  adicionarComentario() {
 
-  if (!this.detalhe) return;
+    if (!this.detalhe) return;
 
-  if (!this.comentario.trim()) return;
+    if (!this.comentario.trim()) return;
 
-  const id = this.detalhe.id;
+    const id = this.detalhe.id;
 
-  this.carregando = true;
+    this.carregando = true;
 
-  this.service.adicionarComentario(
-    id,
-    this.comentario
-  ).subscribe({
+    this.service.adicionarComentario(
+      id,
+      this.comentario
+    ).subscribe({
 
-    next: () => {
+      next: () => {
 
-      this.comentario = '';
+        this.comentario = '';
 
-      this.carregar(id);
+        this.carregar(id);
 
-      this.mensagemSucesso = ['Comentário adicionado'];
+        this.mensagemSucesso = ['Comentário adicionado'];
 
-      this.carregando = false;
+        this.carregando = false;
 
-    },
+      },
 
-    error: (err) => {
+      error: (err) => {
 
-      this.mensagemErro = [
-        err.error?.mensagem ?? 'Erro ao adicionar comentário'
-      ];
+        this.mensagemErro = [
+          err.error?.mensagem ?? 'Erro ao adicionar comentário'
+        ];
 
-      this.carregando = false;
+        this.carregando = false;
 
+      }
+
+    });
+
+  }
+  gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
+
+    const paginas: number[] = [];
+
+    const inicio = Math.max(1, paginaAtual - 2);
+    const fim = Math.min(totalPaginas, paginaAtual + 2);
+
+    for (let i = inicio; i <= fim; i++) {
+      paginas.push(i);
     }
 
-  });
-
-}
-gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
-
-  const paginas: number[] = [];
-
-  const inicio = Math.max(1, paginaAtual - 2);
-  const fim = Math.min(totalPaginas, paginaAtual + 2);
-
-  for (let i = inicio; i <= fim; i++) {
-    paginas.push(i);
+    return paginas;
   }
-
-  return paginas;
-}
   // ================== CARREGAR DETALHE ==================
 
   carregar(id: string) {
@@ -248,12 +274,13 @@ gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
         .subscribe({
 
           next: (res) => {
-  console.log(res);
+            console.log(res);
             this.detalhe = res;
             if (this.detalhe?.processoId) {
-    this.carregarProcesso();
-  }
- this.carregarVisualizacoes(1);
+              this.carregarProcesso();
+            }
+            this.carregarVisualizacoes(1);
+              this.carregarAndamentosProcesso();
             this.cdr.detectChanges();
           },
 
@@ -272,36 +299,36 @@ gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
 
   // ================== SINCRONIZAR ==================
 
- sincronizar() {
+  sincronizar() {
 
-  if (!this.detalhe) return;
+    if (!this.detalhe) return;
 
-  const id = this.detalhe.id;
+    const id = this.detalhe.id;
 
-  this.carregando = true;
+    this.carregando = true;
 
-  this.service.sincronizarPublicacao(id)
-    .subscribe({
+    this.service.sincronizarPublicacao(id)
+      .subscribe({
 
-      next: () => {
+        next: () => {
 
-        this.mensagemSucesso = ['Publicação sincronizada.'];
+          this.mensagemSucesso = ['Publicação sincronizada.'];
 
-        this.carregar(id);
+          this.carregar(id);
 
-      },
+        },
 
-      error: () => {
+        error: () => {
 
-        this.mensagemErro = ['Erro ao sincronizar'];
+          this.mensagemErro = ['Erro ao sincronizar'];
 
-        this.carregando = false;
+          this.carregando = false;
 
-      }
+        }
 
-    });
+      });
 
-}
+  }
 
   // ================== PDF ==================
 
@@ -324,47 +351,47 @@ gerarPaginas(paginaAtual: number, totalPaginas: number): number[] {
   voltar() {
     this.router.navigate(['/webjur']);
   }
-getSituacao(status: number): string {
+  getSituacao(status: number): string {
 
-  switch (status) {
+    switch (status) {
 
-    case 1:
-      return 'Ativo';
+      case 1:
+        return 'Ativo';
 
-    case 2:
-      return 'Suspenso';
+      case 2:
+        return 'Suspenso';
 
-    case 3:
-      return 'Arquivado';
+      case 3:
+        return 'Arquivado';
 
-    case 4:
-      return 'Encerrado';
+      case 4:
+        return 'Encerrado';
 
-    default:
-      return '-';
+      default:
+        return '-';
+    }
+
   }
 
-}
+  getSituacaoClass(status: number): string {
 
-getSituacaoClass(status: number): string {
+    switch (status) {
 
-  switch (status) {
+      case 1:
+        return 'bg-success';
 
-    case 1:
-      return 'bg-success';
+      case 2:
+        return 'bg-warning text-dark';
 
-    case 2:
-      return 'bg-warning text-dark';
+      case 3:
+        return 'bg-secondary';
 
-    case 3:
-      return 'bg-secondary';
+      case 4:
+        return 'bg-dark';
 
-    case 4:
-      return 'bg-dark';
+      default:
+        return 'bg-light text-dark';
+    }
 
-    default:
-      return 'bg-light text-dark';
   }
-
-}
 }

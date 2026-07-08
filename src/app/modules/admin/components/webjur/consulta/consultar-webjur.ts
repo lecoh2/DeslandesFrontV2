@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { WebJurPublicacao } from '../../../../../core/models/webjur/web-jur-publicacao';
 import { WebJurService } from '../../../../../core/services/webjur.service';
+import { WebJurPublicacaoList } from '../../../../../core/models/webjur/web-jur-publicacao-list';
 
 
 
@@ -25,8 +26,8 @@ export class ConsultarWebjur implements OnInit {
     'acoes'
   ];
 
-  dataSource = new MatTableDataSource<WebJurPublicacao>([]);
-  consulta: WebJurPublicacao[] = [];
+  dataSource = new MatTableDataSource<WebJurPublicacaoList>([]);
+  consulta: WebJurPublicacaoList[] = [];
 
   totalRegistros = 0;
   paginaAtual = 1;
@@ -43,7 +44,31 @@ export class ConsultarWebjur implements OnInit {
   private webjurService = inject(WebJurService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+textoModalTitulo = '';
+textoModalConteudo = '';
+mostrarModalTexto = false;
 
+limitarTexto(texto?: string, limite: number = 35): string {
+  if (!texto) return '-';
+
+  return texto.length > limite
+    ? texto.substring(0, limite) + '...'
+    : texto;
+}
+
+abrirTextoCompleto(titulo: string, conteudo?: string) {
+  if (!conteudo) return;
+
+  this.textoModalTitulo = titulo;
+  this.textoModalConteudo = conteudo;
+  this.mostrarModalTexto = true;
+}
+
+fecharTextoCompleto() {
+  this.mostrarModalTexto = false;
+  this.textoModalTitulo = '';
+  this.textoModalConteudo = '';
+}
   ngOnInit(): void {
     this.carregarPublicacoes();
   }

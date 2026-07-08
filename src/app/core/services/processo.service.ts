@@ -9,6 +9,8 @@ import { ApiResponse } from "../models/respostas/api-response";
 import { ProcessoAutoComplete } from "../models/processo/processo-auto-complete";
 import { ObterProcessoResponse } from "../models/processo/obter-processo-response";
 import { ProcessoResumoResponse } from "../models/processo-resumo/processo-resumo-response";
+import { WebJurMovimentacaoResponse } from "../models/webjur/webJur-movimentacao-response";
+import { ProcessoPublicacaoWebJurResponse } from "../models/webjur/processo-publicacao-web-jur-response";
 
 
 @Injectable({
@@ -102,8 +104,23 @@ export class ProcessoService {
     );
   }
   obterResumoProcesso(id: string): Observable<ProcessoResumoResponse> {
-  return this.http.get<ProcessoResumoResponse>(
-    `${this.url}/api/v1/processo/obter-resumo-processo/${id}`
+    return this.http.get<ProcessoResumoResponse>(
+      `${this.url}/api/v1/processo/obter-resumo-processo/${id}`
+    );
+  }
+  obterAndamentosWebJur(processoId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.url}/api/v1/webjur/andamentos/${processoId}`
+    );
+  }
+
+obterMovimentacoesWebJur(idProcesso: string): Observable<any[]> {
+  return this.http.get<any[]>(
+    `${this.url}/api/v1/processo/${idProcesso}/andamentos-webjur`
+  );
+}obterPublicacoesWebJur(id: string) {
+  return this.http.get<ProcessoPublicacaoWebJurResponse[]>(
+    `${this.url}/api/v1/processo/${id}/publicacoes-webjur`
   );
 }
 }

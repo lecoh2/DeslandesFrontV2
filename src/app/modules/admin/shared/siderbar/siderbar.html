@@ -281,29 +281,24 @@
 
 				</ul>
 			</li>
-			<li class="sidebar-item"
-    *ngIf="access.hasNivel('Administrador','Administração','Super Administrador','Coordenador','Estagiários','Supervisor','Conciliador')">
+<li class="sidebar-item"
+  *ngIf="access.hasNivel('Administrador','Administração','Super Administrador','Coordenador','Estagiários','Supervisor','Conciliador')">
 
   <a data-bs-target="#webjur" data-bs-toggle="collapse" class="sidebar-link collapsed">
-    <i class="fas fa-balance-scale align-middle"></i>
-    <span class="align-middle">WebJur</span>
+    <i class="fas fa-newspaper align-middle"></i>
+    <span class="align-middle">Publicações WebJur</span>
   </a>
 
   <ul id="webjur" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
 
     <li class="sidebar-item">
-      <a class="sidebar-link" [routerLink]="['/admin', 'publicacoes']">
-        Publicações
-      </a>
-    </li>
-
-    <li class="sidebar-item">
       <a class="sidebar-link" [routerLink]="['/admin', 'consultar-webjur']">
-        Sincronização
+        Consultar Publicações
       </a>
     </li>
 
   </ul>
+
 </li>
 			<li class="sidebar-item"><a class="sidebar-link collapsed" [routerLink]="['/admin', 'perfil']">
 					<i class="fas fa-user align-middle"></i><span class="align-middle">Perfil</span>

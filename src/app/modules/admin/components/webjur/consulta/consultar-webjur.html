@@ -9,16 +9,16 @@
         Publicações WebJur
       </h2>
 
-      <small class="text-muted">
-        Consulte e sincronize as publicações importadas.
-      </small>
+    <small class="text-muted">
+  Consulte publicações do WebJur e acompanhe os processos vinculados.
+</small>
     </div>
 
   </div>
 
   <div class="card shadow-sm border-0">
 
-    <div class="card-header ">
+    <div class="card-header">
 
       <h5 class="mb-1">
         <i class="fas fa-folder-open text-primary me-2"></i>
@@ -34,7 +34,17 @@
     <div class="card-body">
 
       <!-- ALERTAS -->
+      <div *ngIf="mensagemErro.length" class="alert alert-danger">
+        <div *ngFor="let msg of mensagemErro">
+          {{ msg }}
+        </div>
+      </div>
 
+      <div *ngIf="mensagemSucesso.length" class="alert alert-success">
+        <div *ngFor="let msg of mensagemSucesso">
+          {{ msg }}
+        </div>
+      </div>
 
       <!-- FILTROS -->
       <div class="row g-3 mb-4">
@@ -47,7 +57,11 @@
               <i class="fas fa-search"></i>
             </span>
 
-            <input class="form-control" placeholder="Buscar processo, código ou publicação..." [(ngModel)]="filtro">
+            <input
+              class="form-control"
+              placeholder="Buscar processo, código, vara, órgão ou publicação..."
+              [(ngModel)]="filtro"
+              (keyup.enter)="aplicarFiltro()">
 
           </div>
 
@@ -55,38 +69,57 @@
 
         <div class="col-lg-5">
 
-          <div class="d-flex gap-2">
+         <div class="d-flex justify-content-end gap-2 flex-nowrap">
 
-            <button class="btn btn-primary flex-fill" (click)="aplicarFiltro()">
+  <button
+    class="btn btn-primary text-nowrap"
+    (click)="aplicarFiltro()"
+    [disabled]="carregando">
 
-              <i class="fas fa-search me-2"></i>
-              Filtrar
+    <i class="fas fa-search me-2"></i>
+    Filtrar
 
-            </button>
+  </button>
 
-            <button class="btn btn-success flex-fill" (click)="importarPublicacoes()">
+  <button
+    class="btn btn-success text-nowrap"
+    (click)="importarPublicacoes()"
+    [disabled]="carregando">
 
-              <i class="fas fa-download me-2"></i>
-              Importar
+    <i class="fas fa-download me-2"></i>
+    Buscar Publicações
 
-            </button>
+  </button>
 
-            <button class="btn btn-warning flex-fill text-white" (click)="sincronizarTudo()">
+  <button
+    class="btn btn-warning text-white text-nowrap"
+    (click)="sincronizarTudo()"
+    [disabled]="carregando">
 
-              <i class="fas fa-rotate me-2"></i>
-              Sincronizar
+    <i class="fas fa-rotate me-2"></i>
+    Atualização Completa
 
-            </button>
+  </button>
 
-          </div>
+</div>
 
         </div>
 
       </div>
 
-      <!-- TABELA -->
+      <!-- LOADING -->
+      <div *ngIf="carregando" class="text-center py-5">
 
-      <div class="table-responsive">
+        <div class="spinner-border text-primary"></div>
+
+        <div class="mt-3">
+          Carregando publicações...
+        </div>
+
+      </div>
+
+      <!-- TABELA -->
+      <div *ngIf="!carregando" class="table-responsive">
 
         <table class="table table-hover align-middle">
 
@@ -119,7 +152,7 @@
                 Órgão
               </th>
 
-              <th width="90">
+              <th width="110" class="text-center">
                 <i class="fas fa-cogs me-2"></i>
                 Ações
               </th>
@@ -130,6 +163,18 @@
 
           <tbody>
 
+            <tr *ngIf="consulta.length === 0">
+
+              <td colspan="6" class="text-center text-muted py-4">
+                <i class="fas fa-inbox fa-2x mb-3"></i>
+
+                <h6>
+                  Nenhuma publicação encontrada
+                </h6>
+              </td>
+
+            </tr>
+
             <tr *ngFor="let p of consulta">
 
               <td>
@@ -138,42 +183,72 @@
                 </span>
               </td>
 
-              <td class="fw-semibold">
-                {{ p.numeroProcesso }}
+              <td class="">
+                {{ p.numeroProcesso || '-' }}
               </td>
 
               <td>
-
                 <i class="far fa-clock text-secondary me-2"></i>
-
-                {{ p.dataPublicacao | date:'dd/MM/yyyy HH:mm' }}
-
+                {{ p.dataPublicacao | date:'dd/MM/yyyy' }}
               </td>
+
+             <td>
+  <span
+    class="badge bg-info text-dark"
+    style="cursor: pointer;"
+    (click)="abrirTextoCompleto('Vara', p.varaDescricao)">
+
+    {{ limitarTexto(p.varaDescricao, 30) }}
+
+  </span>
+</td>
 
               <td>
+  <span
+    class="badge bg-secondary"
+    style="cursor: pointer;"
+    (click)="abrirTextoCompleto('Órgão', p.orgaoDescricao)">
 
-                <span class="badge bg-info text-dark">
-                  {{ p.varaDescricao }}
-                </span>
+    {{ limitarTexto(p.orgaoDescricao, 30) }}
 
-              </td>
+  </span>
+</td>
 
-              <td>
+            <td class="text-center">
 
-                <span class="badge bg-secondary">
-                  {{ p.orgaoDescricao }}
-                </span>
+  <div class="d-flex justify-content-center align-items-center gap-1">
 
-              </td>
+    <a
+      class="btn btn-outline-primary btn-sm btn-acao"
+      [routerLink]="['/admin/detalhe-publicacao', p.id]"
+      title="Ver publicação">
 
-              <td>
+      <i class="fas fa-eye"></i>
 
-                <a [routerLink]="['/admin/detalhe-publicacao', p.id]" title="Visualizaa">
-                  <i class="align-middle me-2 fas fa-fw fa-pencil-alt fa-lg"></i>
-                </a>
+    </a>
 
+    <a
+      *ngIf="p.processoId"
+      class="btn btn-outline-success btn-sm btn-acao"
+      [routerLink]="['/admin/detalhe-processo', p.processoId]"
+      title="Abrir processo vinculado">
 
-              </td>
+      <i class="fas fa-gavel"></i>
+
+    </a>
+
+    <span
+      *ngIf="!p.processoId"
+      class="btn btn-outline-secondary btn-sm btn-acao disabled"
+      title="Sem processo vinculado">
+
+      <i class="fas fa-minus"></i>
+
+    </span>
+
+  </div>
+
+</td>
 
             </tr>
 
@@ -184,20 +259,26 @@
       </div>
 
       <!-- PAGINAÇÃO -->
-
-      <nav *ngIf="totalPaginas > 1">
+      <nav *ngIf="!carregando && totalPaginas > 1">
 
         <ul class="pagination justify-content-center mt-3">
 
           <li class="page-item" [class.disabled]="paginaAtual === 1">
-            <a class="page-link" (click)="irParaPagina(1)">Primeira</a>
+            <a class="page-link" (click)="irParaPagina(1)">
+              Primeira
+            </a>
           </li>
 
           <li class="page-item" [class.disabled]="paginaAtual === 1">
-            <a class="page-link" (click)="irParaPagina(paginaAtual - 1)">Anterior</a>
+            <a class="page-link" (click)="irParaPagina(paginaAtual - 1)">
+              Anterior
+            </a>
           </li>
 
-          <li class="page-item" *ngFor="let p of paginasVisiveis" [class.active]="p === paginaAtual">
+          <li
+            class="page-item"
+            *ngFor="let p of paginasVisiveis"
+            [class.active]="p === paginaAtual">
 
             <a class="page-link" (click)="irParaPagina(p)">
               {{ p }}
@@ -206,22 +287,73 @@
           </li>
 
           <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
-            <a class="page-link" (click)="irParaPagina(paginaAtual + 1)">Próxima</a>
+            <a class="page-link" (click)="irParaPagina(paginaAtual + 1)">
+              Próxima
+            </a>
           </li>
 
           <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
-            <a class="page-link" (click)="irParaPagina(totalPaginas)">Última</a>
+            <a class="page-link" (click)="irParaPagina(totalPaginas)">
+              Última
+            </a>
           </li>
 
         </ul>
 
       </nav>
 
-      <p class="text-end text-muted">
+      <p *ngIf="!carregando" class="text-end text-muted">
         Página {{ paginaAtual }} de {{ totalPaginas }} |
         Total: {{ totalRegistros }}
       </p>
+
     </div>
+
+  </div>
+<div
+  class="modal fade show d-block"
+  *ngIf="mostrarModalTexto"
+  style="background: rgba(0,0,0,.5);">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+          {{ textoModalTitulo }}
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          (click)="fecharTextoCompleto()">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <p class="mb-0">
+          {{ textoModalConteudo }}
+        </p>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          (click)="fecharTextoCompleto()">
+          Fechar
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
 
+</div>
 </div>
